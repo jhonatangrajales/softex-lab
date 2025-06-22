@@ -115,3 +115,83 @@ function contactForm() {
 
 </body>
 </html>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<!-- Reemplaza tu <form> antiguo con este div completo -->
+<div x-data="contactForm()">
+    <form x-on:submit.prevent="submitData">
+        <!-- Aquí dentro puedes usar tus propias clases de CSS para que coincida con tu diseño -->
+        <div class="form-group">
+            <label for="name">Nombre</label>
+            <input type="text" id="name" x-model="formData.name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" x-model="formData.email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="message">Mensaje</label>
+            <textarea id="message" rows="4" x-model="formData.message" required></textarea>
+        </div>
+
+        <button type="submit" :disabled="loading">
+            <span x-show="!loading">Enviar</span>
+            <span x-show="loading">Enviando...</span>
+        </button>
+    </form>
+
+    <!-- Mensajes de estado para el usuario -->
+    <div x-show="responseMessage"
+         :class="{ 'success': !error, 'error': error }"
+         class="message"
+         x-text="responseMessage">
+    </div>
+</div>
+<script>
+function contactForm() {
+    return {
+        formData: {
+            name: '',
+            email: '',
+            message: ''
+        },
+        loading: false,
+        responseMessage: '',
+        error: false,
+
+        async submitData() {
+            this.loading = true;
+            this.responseMessage = '';
+            this.error = false;
+
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(this.formData)
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.error || 'Ocurrió un error desconocido.');
+                }
+
+                this.responseMessage = result.message;
+                this.formData = { name: '', email: '', message: '' }; 
+
+            } catch (err) {
+                this.error = true;
+                this.responseMessage = err.message;
+            } finally {
+                this.loading = false;
+            }
+        }
+    }
+}
+</script>
+</body>

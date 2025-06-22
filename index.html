@@ -14,8 +14,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
     
     <!-- Alpine.js for interactivity -->
+    <!-- app.js must be loaded BEFORE Alpine to ensure component data is registered via the 'alpine:init' event -->
+    <script src="app.js" defer></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
     <style>
         /* Applying Montserrat font */
         body {
@@ -224,11 +225,5 @@
         <p>&copy; <span id="year"></span> Softex Labs. Todos los derechos reservados.</p>
         <p class="text-sm mt-2">Diseñando el futuro del software, una línea de código a la vez.</p>
     </footer>
-
-    <!--
-      El script app.js ya contiene la lógica para el formulario,
-      el scroll y el año del footer.
-    -->
-    <script src="app.js" defer></script>
 </body>
 </html>

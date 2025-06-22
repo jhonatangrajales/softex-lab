@@ -1,0 +1,282 @@
+/* General Body Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f4f4f4;
+}
+
+/* Header Styles */
+header {
+    background: #333;
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+}
+
+header .logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+header nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+header nav ul li {
+    display: inline;
+    margin-left: 20px;
+}
+
+header nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+header nav ul li a:hover {
+    color: #007bff;
+}
+
+/* Hero Section */
+.hero {
+    background: url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
+    color: #fff;
+    text-align: center;
+    padding: 100px 20px;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-content {
+    max-width: 800px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+.cta-button {
+    display: inline-block;
+    background: #007bff;
+    color: #fff;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.cta-button:hover {
+    background: #0056b3;
+}
+
+/* Services Section */
+.services {
+    padding: 50px 5%;
+    text-align: center;
+    background-color: #fff;
+}
+
+.services h2 {
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: #333;
+}
+
+.service-cards {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.card {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 30px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 15px;
+}
+
+.card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+.card p {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* About Us Section */
+.about-us {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 50px 5%;
+    background-color: #e9ecef;
+    gap: 40px;
+}
+
+.about-content {
+    flex: 1;
+    min-width: 300px;
+}
+
+.about-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.about-content p {
+    font-size: 1.1rem;
+    color: #555;
+}
+
+.about-image {
+    flex: 1;
+    min-width: 300px;
+    text-align: center;
+}
+
+.about-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Contact Section */
+.contact {
+    padding: 50px 5%;
+    text-align: center;
+    background-color: #fff;
+}
+
+.contact-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #f9f9f9;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contact-container h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+/* Form Specific Styles (from previous inlined styles) */
+.form-container {
+    /* This container is nested inside .contact-container, so its width might need adjustment */
+    /* background: white; */ /* Already handled by .contact-container's background */
+    /* padding: 2rem; */ /* Already handled by .contact-container's padding */
+    /* border-radius: 8px; */ /* Already handled by .contact-container's border-radius */
+    /* box-shadow: 0 4px 6px rgba(0,0,0,0.1); */ /* Already handled by .contact-container's box-shadow */
+    width: 100%; /* Make it fill its parent */
+    max-width: 400px; /* Keep a max-width for readability */
+    margin: 0 auto; /* Center it within .contact-container */
+}
+.form-group { margin-bottom: 1rem; }
+label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+input, textarea { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+input.error-border, textarea.error-border { border-color: #991b1b; }
+.error-text { color: #991b1b; font-size: 0.875rem; margin-top: 0.25rem; text-align: left;}
+button { width: 100%; padding: 0.75rem; background-color: #2563eb; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; transition: background-color 0.3s ease; }
+button:hover:not(:disabled) { background-color: #1a4a9e; }
+button:disabled { background-color: #9ca3af; cursor: not-allowed; }
+.message { margin-top: 1rem; padding: 0.75rem; border-radius: 4px; text-align: left;}
+.success { background-color: #d1fae5; color: #065f46; }
+.error { background-color: #fee2e2; color: #991b1b; }
+
+/* Footer Styles */
+footer {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1.5rem 0;
+    font-size: 0.9rem;
+}
+
+/* Scroll Reveal Animations */
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+    }
+
+    header nav ul li {
+        margin: 0 10px;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .service-cards {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        width: 90%;
+    }
+
+    .about-us {
+        flex-direction: column;
+    }
+
+    .contact-container {
+        padding: 20px;
+    }
+}

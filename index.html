@@ -49,11 +49,13 @@
 <body class="text-gray-200" x-data="{ mobileMenuOpen: false }">
 
     <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" x-data="{ scrolled: false }" @scroll.window="scrolled = (window.scrollY > 50)">
+    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" x-data="{ scrolled: false }" @scroll.window="scrolled = (window.scrollY > 50)" role="banner">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center" :class="{ 'bg-slate-900/80 backdrop-blur-sm shadow-lg rounded-xl mt-2': scrolled }">
             <!-- Logo -->
-            <a href="#" class="flex items-center space-x-2">
-                <svg class="h-10 w-10 text-violet-400" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <a href="#" class="flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 focus:ring-offset-slate-900 rounded-sm">
+                <svg class="h-10 w-10 text-violet-400" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="logoTitle logoDesc">
+                    <title id="logoTitle">Logo de Softex Labs</title>
+                    <desc id="logoDesc">Dos formas de C entrelazadas que forman el logo.</desc>
                     <path d="M73.45,25C86.7,25 95,35.82 95,49.5C95,63.18 86.7,75 73.45,75C60.2,75 50.11,63.18 50.11,49.5C50.11,40.12 55.43,30.2 65,26.5" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M26.55,75C13.3,75 5,64.18 5,50.5C5,36.82 13.3,25 26.55,25C39.8,25 49.89,36.82 49.89,50.5C49.89,59.88 44.57,69.8 35,73.5" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -61,10 +63,10 @@
             </a>
             
             <!-- Desktop Menu -->
-            <div class="hidden md:flex items-center space-x-8">
-                <a href="#mision" class="hover:text-violet-400 transition-colors">Nosotros</a>
-                <a href="#valores" class="hover:text-violet-400 transition-colors">Valores</a>
-                <a href="#contacto" class="bg-violet-600 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded-lg transition-transform duration-300 ease-in-out hover:scale-105">Contacto</a>
+            <div class="hidden md:flex items-center space-x-8" role="navigation" aria-label="Menú principal">
+                <a href="#mision" class="hover:text-violet-400 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-400 rounded-sm">Nosotros</a>
+                <a href="#valores" class="hover:text-violet-400 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-400 rounded-sm">Valores</a>
+                <a href="#contacto" class="bg-violet-600 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded-lg transition-transform duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-violet-400">Contacto</a>
             </div>
 
             <!-- Mobile Menu boton -->
@@ -78,14 +80,14 @@
         </nav>
 
         <!-- Mobile Menu -->
-        <div id="mobile-menu" x-show="mobileMenuOpen" @click.away="mobileMenuOpen = false" x-transition class="md:hidden bg-slate-900/95 backdrop-blur-sm p-6">
-            <a href="#mision" class="block py-2 text-center text-lg hover:text-violet-400">Nosotros</a>
-            <a href="#valores" class="block py-2 text-center text-lg hover:text-violet-400">Valores</a>
-            <a href="#contacto" class="block mt-4 w-full bg-violet-600 hover:bg-violet-500 text-white font-bold py-3 px-4 rounded-lg text-center">Contacto</a>
+        <div id="mobile-menu" x-show="mobileMenuOpen" @click.away="mobileMenuOpen = false" x-transition class="md:hidden bg-slate-900/95 backdrop-blur-sm p-6" role="navigation" aria-label="Menú móvil">
+            <a href="#mision" @click="mobileMenuOpen = false" class="block py-2 text-center text-lg hover:text-violet-400">Nosotros</a>
+            <a href="#valores" @click="mobileMenuOpen = false" class="block py-2 text-center text-lg hover:text-violet-400">Valores</a>
+            <a href="#contacto" @click="mobileMenuOpen = false" class="block mt-4 w-full bg-violet-600 hover:bg-violet-500 text-white font-bold py-3 px-4 rounded-lg text-center">Contacto</a>
         </div>
     </header>
 
-    <main>
+    <main role="main">
         <section class="min-h-screen flex items-center justify-center text-center bg-gradient-to-br from-indigo-900 via-slate-900 to-black">
             <div class="container mx-auto px-6">
                 <div class="w-32 h-32 mx-auto mb-6">
@@ -137,7 +139,7 @@
 
                     <div class="glass-card p-8 rounded-2xl reveal-on-scroll">
                         <div class="text-violet-400 mb-4">
-                             <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
                         </div>
                         <h3 class="text-2xl font-bold mb-2 text-white">Innovación Continua</h3>
                         <p>Búsqueda constante de nuevas formas de mejorar, explorar tecnologías emergentes y ofrecer soluciones que anticipen el futuro.</p>
@@ -145,7 +147,7 @@
 
                     <div class="glass-card p-8 rounded-2xl reveal-on-scroll" style="transition-delay: 150ms;">
                         <div class="text-violet-400 mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                         </div>
                         <h3 class="text-2xl font-bold mb-2 text-white">Transparencia y Confianza</h3>
                         <p>Honestidad y apertura en todas las interacciones, construyendo relaciones basadas en credibilidad y comunicación clara.</p>
@@ -153,7 +155,7 @@
 
                     <div class="glass-card p-8 rounded-2xl reveal-on-scroll" style="transition-delay: 300ms;">
                          <div class="text-violet-400 mb-4">
-                             <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
                         </div>
                         <h3 class="text-2xl font-bold mb-2 text-white">Excelencia y Calidad</h3>
                         <p>Compromiso inquebrantable con la entrega de software robusto, eficiente y de alta calidad que supere las expectativas.</p>
@@ -172,11 +174,11 @@
 
                 <div class="max-w-2xl mx-auto" x-data="contactForm">
                     <!-- Mensajes de éxito y error -->
-                    <div x-show="successMessage" x-transition class="glass-card p-8 rounded-2xl text-center mb-6">
+                    <div x-show="successMessage" x-transition class="glass-card p-8 rounded-2xl text-center mb-6" aria-live="polite">
                         <h3 class="text-2xl font-bold text-green-400 mb-2">¡Mensaje Enviado!</h3>
                         <p x-text="successMessage">Gracias por contactarnos. Nos comunicaremos contigo a la brevedad.</p>
                     </div>
-                    <div x-show="errorMessage" x-transition class="glass-card p-8 rounded-2xl text-center mb-6 bg-red-500/20 border-red-500/50">
+                    <div x-show="errorMessage" x-transition class="glass-card p-8 rounded-2xl text-center mb-6 bg-red-500/20 border-red-500/50" aria-live="assertive">
                         <h3 class="text-2xl font-bold text-red-400 mb-2">Error</h3>
                         <p x-text="errorMessage"></p>
                     </div>
@@ -218,7 +220,7 @@
                     <!-- Email -->
                     <div class="glass-card p-8 rounded-2xl reveal-on-scroll flex items-start space-x-4">
                         <div class="text-violet-400 flex-shrink-0 mt-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
                         </div>
@@ -228,23 +230,23 @@
                         </div>
                     </div>
 
-                    <!-- Celular -->
+                    <!-- WhatsApp -->
                     <div class="glass-card p-8 rounded-2xl reveal-on-scroll flex items-start space-x-4" style="transition-delay: 150ms;">
                         <div class="text-violet-400 flex-shrink-0 mt-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                             </svg>
                         </div>
                         <div>
-                            <h4 class="text-xl font-bold text-white mb-1">Celular</h4>
-                            <a href="tel:+573178334370" class="text-violet-300 hover:text-violet-200 transition-colors">+57 317 8334370</a>
+                            <h4 class="text-xl font-bold text-white mb-1">WhatsApp</h4>
+                            <a href="https://wa.me/573178334370" target="_blank" rel="noopener noreferrer" class="text-violet-300 hover:text-violet-200 transition-colors">+57 317 8334370</a>
                         </div>
                     </div>
 
                     <!-- Ubicación -->
                     <div class="glass-card p-8 rounded-2xl reveal-on-scroll flex items-start space-x-4" style="transition-delay: 300ms;">
                         <div class="text-violet-400 flex-shrink-0 mt-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
@@ -260,7 +262,7 @@
         </section>
     </main>
 
-    <footer class="bg-slate-900/50 border-t border-slate-800 py-8 text-center text-gray-400">
+    <footer class="bg-slate-900/50 border-t border-slate-800 py-8 text-center text-gray-400" role="contentinfo">
         <div class="container mx-auto px-6">
             <p>&copy; <span id="year"></span> Softex Labs. Todos los derechos reservados.</p>
             <p class="text-sm mt-2">Diseñando el futuro del software, una línea de código a la vez.</p>

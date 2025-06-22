@@ -13,6 +13,8 @@
         .form-group { margin-bottom: 1rem; }
         label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
         input, textarea { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        input.error-border, textarea.error-border { border-color: #991b1b; }
+        .error-text { color: #991b1b; font-size: 0.875rem; margin-top: 0.25rem; }
         button { width: 100%; padding: 0.75rem; background-color: #2563eb; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; }
         button:disabled { background-color: #9ca3af; }
         .message { margin-top: 1rem; padding: 0.75rem; border-radius: 4px; }
@@ -25,23 +27,26 @@
 <div class="form-container">
     <h2>Contacto</h2>
 
-    <!-- Inicializa el componente Alpine.js con x-data="contactForm()" -->
-    <div x-data="contactForm()">
+    <!-- Inicializa el componente Alpine.js. La lógica ahora viene de app.js -->
+    <div x-data="contactForm()" class="w-full">
         <!-- El formulario llama a la función `submitData` al enviarse -->
-        <form x-on:submit.prevent="submitData">
+        <form x-on:submit.prevent="submitData" novalidate>
             <div class="form-group">
                 <label for="name">Nombre</label>
-                <input type="text" id="name" x-model="formData.name" required>
+                <input type="text" id="name" x-model="formData.name" :class="{'error-border': errors.name}">
+                <p x-show="errors.name" x-text="errors.name" class="error-text" style="display: none;"></p>
             </div>
 
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" x-model="formData.email" required>
+                <input type="email" id="email" x-model="formData.email" :class="{'error-border': errors.email}">
+                <p x-show="errors.email" x-text="errors.email" class="error-text" style="display: none;"></p>
             </div>
 
             <div class="form-group">
                 <label for="message">Mensaje</label>
-                <textarea id="message" rows="4" x-model="formData.message" required></textarea>
+                <textarea id="message" rows="4" x-model="formData.message" :class="{'error-border': errors.message}"></textarea>
+                <p x-show="errors.message" x-text="errors.message" class="error-text" style="display: none;"></p>
             </div>
 
             <!-- El botón con el texto "Enviar" y estado de carga -->
@@ -51,66 +56,14 @@
             </button>
         </form>
 
-        <!-- Mensajes de estado para el usuario -->
-        <div x-show="responseMessage"
-             :class="{ 'success': !error, 'error': error }"
-             class="message"
-             x-text="responseMessage">
-        </div>
+        <!-- Mensajes de éxito y error -->
+        <div x-show="successMessage" x-text="successMessage" class="message success" style="display: none;"></div>
+        <div x-show="errorMessage" x-text="errorMessage" class="message error" style="display: none;"></div>
     </div>
 </div>
 
-<!-- Este script es CRÍTICO: Define la función `contactForm` que contiene `submitData` -->
-<script>
-function contactForm() {
-    return {
-        formData: {
-            name: '',
-            email: '',
-            message: ''
-        },
-        loading: false,
-        responseMessage: '',
-        error: false,
-
-        // La función submitData que Alpine.js busca
-        async submitData() {
-            this.loading = true;
-            this.responseMessage = '';
-            this.error = false;
-
-            try {
-                // Realiza la solicitud POST a tu API de Vercel
-                const response = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(this.formData)
-                });
-
-                const result = await response.json();
-
-                if (!response.ok) {
-                    // Si la API devuelve un error (código de estado 4xx o 5xx)
-                    throw new Error(result.error || 'Ocurrió un error desconocido.');
-                }
-
-                // Éxito: muestra el mensaje y limpia el formulario
-                this.responseMessage = result.message;
-                this.formData = { name: '', email: '', message: '' }; 
-
-            } catch (err) {
-                // Manejo de errores de red o de la API
-                this.error = true;
-                this.responseMessage = err.message;
-            } finally {
-                // Siempre desactiva el estado de carga al finalizar
-                this.loading = false;
-            }
-        }
-    }
-}
-</script>
+<!-- Incluimos app.js que contiene la lógica del formulario -->
+<script src="app.js" defer></script>
 
 </body>
+</html>

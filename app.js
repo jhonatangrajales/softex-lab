@@ -17,7 +17,11 @@ function contactForm() {
         errorMessage: '',
 
         validate() {
-            this.errors = { name: '', email: '', message: '' }; // Reset errors
+            // Resetea los errores individualmente para asegurar la reactividad en Alpine.js
+            this.errors.name = '';
+            this.errors.email = '';
+            this.errors.message = '';
+
             let isValid = true;
 
             if (!this.formData.name.trim()) {
@@ -58,22 +62,28 @@ function contactForm() {
                 },
                 body: new URLSearchParams(this.formData)
             })
-            .then(response => response.json().then(data => ({ status: response.status, body: data })))
-            .then(({ status, body }) => {
-                if (status >= 200 && status < 300) {
-                    this.successMessage = '¡Mensaje enviado con éxito! Puedes enviar otro si lo deseas.';
-                    this.formData.name = '';
-                    this.formData.email = '';
-                    this.formData.message = '';
-                    setTimeout(() => {
-                        this.successMessage = '';
-                    }, 5000);
-                } else {
-                    this.errorMessage = body.error || 'Ocurrió un error inesperado.';
+            .then(response => {
+                if (!response.ok) {
+                    // Intenta obtener el error del cuerpo JSON, si falla, usa un mensaje genérico.
+                    return response.json()
+                        .then(data => { throw new Error(data.error || `Error del servidor: ${response.status}`); })
+                        .catch(() => { throw new Error(`Error del servidor: ${response.status}. La API no está disponible o no responde correctamente.`); });
                 }
+                return response.json();
             })
-            .catch(() => {
-                this.errorMessage = 'No se pudo conectar con el servidor. Inténtalo de nuevo más tarde.';
+            .then(data => {
+                this.successMessage = data.message || '¡Mensaje enviado con éxito! Puedes enviar otro si lo deseas.';
+                this.formData.name = '';
+                this.formData.email = '';
+                this.formData.message = '';
+                // Limpia los errores por si quedaba alguno
+                this.validate();
+                setTimeout(() => {
+                    this.successMessage = '';
+                }, 5000);
+            })
+            .catch((err) => {
+                this.errorMessage = err.message;
             })
             .finally(() => {
                 this.loading = false;

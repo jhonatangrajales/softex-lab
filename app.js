@@ -14,34 +14,44 @@ document.addEventListener('alpine:init', () => {
         successMessage: '',
         errorMessage: '',
 
-        validate() {
-            // Resetea los errores individualmente para asegurar la reactividad en Alpine.js
-            this.errors.name = '';
-            this.errors.email = '';
-            this.errors.message = '';
-
+        // Valida un campo específico y actualiza su mensaje de error
+        validateField(field) {
             let isValid = true;
+            this.errors[field] = ''; // Limpia el error previo para este campo
 
-            if (!this.formData.name.trim()) {
-                this.errors.name = 'El nombre es obligatorio.';
-                isValid = false;
+            switch (field) {
+                case 'name':
+                    if (!this.formData.name.trim()) {
+                        this.errors.name = 'El nombre es obligatorio.';
+                        isValid = false;
+                    }
+                    break;
+                case 'email':
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!this.formData.email) {
+                        this.errors.email = 'El correo electrónico es obligatorio.';
+                        isValid = false;
+                    } else if (!emailRegex.test(this.formData.email)) {
+                        this.errors.email = 'Por favor, introduce un correo electrónico válido.';
+                        isValid = false;
+                    }
+                    break;
+                case 'message':
+                    if (this.formData.message.trim().length < 10) {
+                        this.errors.message = 'El mensaje debe tener al menos 10 caracteres.';
+                        isValid = false;
+                    }
+                    break;
             }
+            return isValid; // Retorna si el campo es válido
+        },
 
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!this.formData.email) {
-                this.errors.email = 'El correo electrónico es obligatorio.';
-                isValid = false;
-            } else if (!emailRegex.test(this.formData.email)) {
-                this.errors.email = 'Por favor, introduce un correo electrónico válido.';
-                isValid = false;
-            }
-
-            if (this.formData.message.trim().length < 10) {
-                this.errors.message = 'El mensaje debe tener al menos 10 caracteres.';
-                isValid = false;
-            }
-
-            return isValid;
+        // Valida todos los campos del formulario para el envío
+        validate() {
+            const isNameValid = this.validateField('name');
+            const isEmailValid = this.validateField('email');
+            const isMessageValid = this.validateField('message');
+            return isNameValid && isEmailValid && isMessageValid;
         },
 
         submitData() {
@@ -73,8 +83,7 @@ document.addEventListener('alpine:init', () => {
                 this.successMessage = data.message || '¡Mensaje enviado con éxito! Puedes enviar otro si lo deseas.';
                 this.formData.name = '';
                 this.formData.email = '';
-                this.formData.message = '';
-                // Limpia los errores por si quedaba alguno
+                this.formData.message = ''; // Limpia el formulario
                 this.validate();
                 setTimeout(() => {
                     this.successMessage = '';

@@ -3,17 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Título SEO -->
     <title>Softex Labs - Desarrollo de Software a Medida</title>
+
+    <!-- Meta Descripción SEO -->
+    <meta name="description" content="Softex Labs transforma tus ideas en soluciones de software a medida. Expertos en desarrollo innovador y confiable para impulsar el crecimiento de tu negocio.">
+    <meta name="keywords" content="desarrollo de software, software a medida, softex labs, desarrollo web, aplicaciones móviles, soluciones tecnológicas, Colombia">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.softex-labs.com/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.softex-labs.com/">
+    <meta property="og:title" content="Softex Labs - Desarrollo de Software a Medida">
+    <meta property="og:description" content="Transformamos tus ideas en soluciones de software innovadoras y confiables.">
+    <meta property="og:image" content="https://www.softex-labs.com/images/og-image.png"> <!-- Debes crear y subir esta imagen -->
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.softex-labs.com/">
+    <meta property="twitter:title" content="Softex Labs - Desarrollo de Software a Medida">
+    <meta property="twitter:description" content="Transformamos tus ideas en soluciones de software innovadoras y confiables.">
+    <meta property="twitter:image" content="https://www.softex-labs.com/images/og-image.png"> <!-- Usa la misma imagen que Open Graph -->
     
     <script src="https://cdn.tailwindcss.com"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
-    
-  
+
     <script src="app.js" defer></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
@@ -45,11 +68,32 @@
             transform: translateY(0);
         }
     </style>
+
+    <!-- Datos Estructurados (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Softex Labs",
+      "url": "https://www.softex-labs.com/",
+      "logo": "https://www.softex-labs.com/images/logo.png", // Debes crear y subir esta imagen
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+57-317-8334370",
+        "contactType": "customer service",
+        "areaServed": "CO",
+        "availableLanguage": ["es"]
+      },
+      "sameAs": [
+        "https://wa.me/573178334370"
+      ]
+    }
+    </script>
 </head>
 <body class="text-gray-200" x-data="{ mobileMenuOpen: false }">
 
     <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" x-data="{ scrolled: false }" @scroll.window="scrolled = (window.scrollY > 50)" role="banner">
+    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" x-data="{ scrolled: false }" @scroll.window="scrolled = (window.scrollY > 50)">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center" :class="{ 'bg-slate-900/80 backdrop-blur-sm shadow-lg rounded-xl mt-2': scrolled }">
             <!-- Logo -->
             <a href="#" class="flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 focus:ring-offset-slate-900 rounded-sm">
@@ -63,7 +107,7 @@
             </a>
             
             <!-- Desktop Menu -->
-            <div class="hidden md:flex items-center space-x-8" role="navigation" aria-label="Menú principal">
+            <div class="hidden md:flex items-center space-x-8" aria-label="Menú principal">
                 <a href="#mision" class="hover:text-violet-400 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-400 rounded-sm">Nosotros</a>
                 <a href="#valores" class="hover:text-violet-400 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-400 rounded-sm">Valores</a>
                 <a href="#contacto" class="bg-violet-600 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded-lg transition-transform duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-violet-400">Contacto</a>
@@ -80,14 +124,14 @@
         </nav>
 
         <!-- Mobile Menu -->
-        <div id="mobile-menu" x-show="mobileMenuOpen" @click.away="mobileMenuOpen = false" x-transition class="md:hidden bg-slate-900/95 backdrop-blur-sm p-6" role="navigation" aria-label="Menú móvil">
+        <div id="mobile-menu" x-show="mobileMenuOpen" @click.away="mobileMenuOpen = false" x-transition class="md:hidden bg-slate-900/95 backdrop-blur-sm p-6" aria-label="Menú móvil">
             <a href="#mision" @click="mobileMenuOpen = false" class="block py-2 text-center text-lg hover:text-violet-400">Nosotros</a>
             <a href="#valores" @click="mobileMenuOpen = false" class="block py-2 text-center text-lg hover:text-violet-400">Valores</a>
             <a href="#contacto" @click="mobileMenuOpen = false" class="block mt-4 w-full bg-violet-600 hover:bg-violet-500 text-white font-bold py-3 px-4 rounded-lg text-center">Contacto</a>
         </div>
     </header>
 
-    <main role="main">
+    <main>
         <section class="min-h-screen flex items-center justify-center text-center bg-gradient-to-br from-indigo-900 via-slate-900 to-black">
             <div class="container mx-auto px-6">
                 <div class="w-32 h-32 mx-auto mb-6">
@@ -262,11 +306,17 @@
         </section>
     </main>
 
-    <footer class="bg-slate-900/50 border-t border-slate-800 py-8 text-center text-gray-400" role="contentinfo">
+    <footer class="bg-slate-900/50 border-t border-slate-800 py-8 text-center text-gray-400">
         <div class="container mx-auto px-6">
             <p>&copy; <span id="year"></span> Softex Labs. Todos los derechos reservados.</p>
             <p class="text-sm mt-2">Diseñando el futuro del software, una línea de código a la vez.</p>
         </div>
     </footer>
+
+    <!-- Vercel Speed Insights -->
+    <script src="/_vercel/speed-insights/script.js" defer></script>
+    <!-- Vercel Analytics -->
+    <script>window.va = window.va || function () { (window.va.q = window.va.q || []).push(arguments); };</script>
+    <script src="/_vercel/insights/script.js" defer></script>
 </body>
 </html>

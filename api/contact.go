@@ -1,14 +1,19 @@
 package api
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"net/smtp"
 	"os"
 	"regexp"
+	"strings"
+	"sync"
+	"time"
 )
 
 // ContactData representa los datos del formulario.
@@ -28,7 +33,45 @@ type SmtpConfig struct {
 }
 
 // emailRegex es una expresión regular simple para validar el formato del correo electrónico.
-var emailRegex = regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`)
+var emailRegex = regexp.MustCompile(`^[^\s@]+@[^\s@]+\.[^\s@]+$`)
+
+// --- Rate Limiter ---
+
+type requestInfo struct {
+	count    int
+	lastSeen time.Time
+}
+
+var (
+	visitors = make(map[string]*requestInfo)
+	mu       sync.Mutex
+)
+
+const (
+	rateLimit  = 5               // Límite de solicitudes por ventana de tiempo
+	timeWindow = 1 * time.Minute // Ventana de tiempo
+)
+
+// init se ejecuta una vez cuando el paquete es cargado.
+func init() {
+	// Inicia una goroutine para limpiar visitantes antiguos y prevenir fugas de memoria.
+	go cleanupVisitors()
+}
+
+func cleanupVisitors() {
+	for {
+		time.Sleep(10 * time.Minute) // Frecuencia de limpieza
+		mu.Lock()
+		for ip, v := range visitors {
+			if time.Since(v.lastSeen) > timeWindow {
+				delete(visitors, ip)
+			}
+		}
+		mu.Unlock()
+	}
+}
+
+// --- Fin del Rate Limiter ---
 
 func sendJSONError(w http.ResponseWriter, message string, status int) {
 	w.Header().Set("Content-Type", "application/json")
@@ -60,85 +103,68 @@ func newSmtpConfig() (SmtpConfig, error) {
 	return config, nil
 }
 
-func formatEmailBody(data ContactData) string {
-	// Usamos comillas invertidas (backticks) para un string multilínea en Go.
-	emailTemplate := `<!DOCTYPE html>
-<html lang="es">
+// emailTemplate es una plantilla HTML parseada para el correo.
+// Usar html/template escapa automáticamente la entrada del usuario, previniendo ataques XSS.
+var emailTemplate = template.Must(template.New("contactEmail").Parse(`<!DOCTYPE html>
+<html lang="es" style="font-family: 'Montserrat', sans-serif; margin: 0; padding: 0;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuevo Mensaje de Contacto - Softex Labs</title>
-    <style>
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-        .container {
-            width: 100%;
-            max-width: 600px;
-            margin: 20px auto;
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .logo {
-            width: 150px;
-            height: auto;
-        }
-        h1 {
-            color: #4f46e5;
-        }
-        .message {
-            margin-top: 20px;
-        }
-        .field {
-            margin-bottom: 10px;
-        }
-        .label {
-            font-weight: bold;
-        }
-        .footer {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 0.8em;
-            color: #777;
-        }
-    </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Nuevo Mensaje de Contacto</h1>
-        </div>
-        <div class="message">
-            <p>Has recibido un nuevo mensaje desde tu sitio web:</p>
-            <div class="field">
-                <span class="label">Nombre:</span> ` + data.Name + `
-            </div>
-            <div class="field">
-                <span class="label">Email de Contacto:</span> ` + data.Email + `
-            </div>
-            <div class="field">
-                <span class="label">Mensaje:</span>
-                <p>` + data.Message + `</p>
-            </div>
-        </div>
-        <div class="footer">
-            <p>&copy; ` + fmt.Sprintf("%d", 2024) + ` Softex Labs. Todos los derechos reservados.</p>
-        </div>
-    </div>
+<body style="background-color: #f4f4f4; color: #333; padding: 20px;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td align="center">
+                <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 30px;">
+                    <!-- Header -->
+                    <tr>
+                        <td align="center" style="padding-bottom: 20px; border-bottom: 1px solid #eee;">
+                            <h1 style="color: #4f46e5; margin: 10px 0 0 0;">Nuevo Mensaje de Contacto</h1>
+                        </td>
+                    </tr>
+                    <!-- Body -->
+                    <tr>
+                        <td style="padding: 20px 0;">
+                            <p>Has recibido un nuevo mensaje desde tu sitio web:</p>
+                            <p style="margin-bottom: 15px;"><strong>Nombre:</strong> {{.Name}}</p>
+                            <p style="margin-bottom: 15px;"><strong>Email de Contacto:</strong> {{.Email}}</p>
+                            <p><strong>Mensaje:</strong></p>
+                            <p style="background-color: #f9f9f9; border-left: 4px solid #4f46e5; padding: 15px; margin: 0;">{{.Message}}</p>
+                        </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                        <td align="center" style="padding-top: 20px; border-top: 1px solid #eee; font-size: 0.8em; color: #777;">
+                            <p>&copy; {{.Year}} Softex Labs. Todos los derechos reservados.</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 </body>
-</html>`
+</html>`))
 
-	return emailTemplate
+func formatEmailBody(data ContactData) (string, error) {
+	var body bytes.Buffer
+	templateData := struct {
+		Name    string
+		Email   string
+		Message string
+		Year    int
+	}{
+		Name:    data.Name,
+		Email:   data.Email,
+		Message: data.Message,
+		Year:    time.Now().Year(),
+	}
+
+	if err := emailTemplate.Execute(&body, templateData); err != nil {
+		log.Printf("Error al ejecutar la plantilla de correo: %v", err)
+		return "", errors.New("error interno al generar el cuerpo del correo")
+	}
+	return body.String(), nil
 }
 
 // sendEmail construye y envía el correo electrónico.
@@ -149,14 +175,20 @@ func sendEmail(config SmtpConfig, data ContactData) error {
 	headers := "MIME-version: 1.0;\r\nContent-Type: text/html; charset=\"UTF-8\";\r\n"
 	fromHeader := fmt.Sprintf("From: Softex Labs Contacto <%s>\r\n", config.User)
 	toHeader := fmt.Sprintf("To: %s\r\n", config.ToEmail)
+	replyToHeader := fmt.Sprintf("Reply-To: %s\r\n", data.Email)
 	subjectHeader := "Subject: Nuevo Mensaje de Contacto - Softex Labs\r\n"
 
-	// Usamos la función para formatear el cuerpo del correo con la plantilla HTML.
-	emailBody := fromHeader + toHeader + subjectHeader + headers + "\r\n" + formatEmailBody(data)
+	msgBody, err := formatEmailBody(data)
+	if err != nil {
+		return err
+	}
+
+	// Combinamos todos los headers y el cuerpo del mensaje.
+	emailBody := fromHeader + toHeader + replyToHeader + subjectHeader + headers + "\r\n" + msgBody
 
 	smtpAddr := fmt.Sprintf("%s:%s", config.Host, config.Port)
 
-	err := smtp.SendMail(smtpAddr, auth, config.User, []string{config.ToEmail}, []byte(emailBody))
+	err = smtp.SendMail(smtpAddr, auth, config.User, []string{config.ToEmail}, []byte(emailBody))
 	if err != nil {
 		log.Printf("Error al enviar el correo: %v", err)
 		return errors.New("hubo un error interno al intentar enviar el correo. Por favor, inténtelo de nuevo más tarde")
@@ -185,6 +217,16 @@ func parseAndValidateRequest(r *http.Request) (ContactData, error) {
 	return data, nil
 }
 
+func getClientIP(r *http.Request) string {
+	// Vercel y otros proxies establecen esta cabecera.
+	ip := r.Header.Get("X-Forwarded-For")
+	if ip != "" {
+		return strings.Split(ip, ",")[0]
+	}
+	// Fallback para desarrollo local.
+	return r.RemoteAddr
+}
+
 // Handler es la función que Vercel ejecutará.
 func Handler(w http.ResponseWriter, r *http.Request) {
 	// Log para confirmar que la función fue invocada. Esto es clave para el diagnóstico.
@@ -201,6 +243,26 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		return
 	}
+
+	// Aplicar el límite de tasa (Rate Limiting)
+	clientIP := getClientIP(r)
+	mu.Lock()
+	if v, exists := visitors[clientIP]; exists {
+		if time.Since(v.lastSeen) > timeWindow {
+			v.count = 1
+			v.lastSeen = time.Now()
+		} else {
+			v.count++
+		}
+		if v.count > rateLimit {
+			mu.Unlock()
+			sendJSONError(w, "Has excedido el límite de solicitudes. Por favor, inténtalo de nuevo más tarde.", http.StatusTooManyRequests)
+			return
+		}
+	} else {
+		visitors[clientIP] = &requestInfo{count: 1, lastSeen: time.Now()}
+	}
+	mu.Unlock()
 
 	if r.Method != http.MethodPost {
 		sendJSONError(w, "Método no permitido. Solo se acepta POST.", http.StatusMethodNotAllowed)

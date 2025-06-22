@@ -56,9 +56,9 @@ document.addEventListener('alpine:init', () => {
             fetch('/api/contact', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json',
                 },
-                body: new URLSearchParams(this.formData)
+                body: JSON.stringify(this.formData)
             })
             .then(response => {
                 if (!response.ok) {

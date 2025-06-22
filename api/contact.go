@@ -91,18 +91,9 @@ func sendEmail(config SmtpConfig, data ContactData) error {
 func parseAndValidateRequest(r *http.Request) (ContactData, error) {
 	var data ContactData
 
-	contentType := r.Header.Get("Content-Type")
-	if contentType == "application/json" {
-		if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
-			return ContactData{}, errors.New("error al decodificar la solicitud JSON. Asegúrese de que el formato sea correcto")
-		}
-	} else {
-		if err := r.ParseForm(); err != nil {
-			return ContactData{}, errors.New("error al procesar el formulario. Asegúrese de que los datos estén bien formados")
-		}
-		data.Name = r.FormValue("name")
-		data.Email = r.FormValue("email")
-		data.Message = r.FormValue("message")
+	// Ahora solo aceptamos JSON, lo que simplifica y estandariza el código.
+	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
+		return ContactData{}, errors.New("error al decodificar la solicitud JSON. Asegúrese de que el formato sea correcto")
 	}
 
 	if data.Name == "" || data.Email == "" || data.Message == "" {

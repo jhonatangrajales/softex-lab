@@ -2,86 +2,165 @@ package api
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
 	"net/smtp"
 	"os"
+	"regexp"
 )
 
-// No necesitamos el rate limiter en memoria para el modelo serverless,
-// ya que cada invocación puede ser una instancia nueva.
-// Vercel tiene su propia protección contra ataques DDoS.
+// ContactData representa los datos del formulario.
+type ContactData struct {
+	Name    string `json:"name"`
+	Email   string `json:"email"`
+	Message string `json:"message"`
+}
+
+// SmtpConfig contiene la configuración para el servidor SMTP.
+type SmtpConfig struct {
+	Host    string
+	Port    string
+	User    string
+	Pass    string
+	ToEmail string
+}
+
+// emailRegex es una expresión regular simple para validar el formato del correo electrónico.
+var emailRegex = regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`)
 
 func sendJSONError(w http.ResponseWriter, message string, status int) {
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*") // CORS para Vercel
+	// Las cabeceras CORS ahora se establecen en el Handler principal.
 	w.WriteHeader(status)
 	json.NewEncoder(w).Encode(map[string]string{"error": message})
 }
 
-// Handler es la función que Vercel ejecutará.
-func Handler(w http.ResponseWriter, r *http.Request) {
-	// Vercel maneja las rutas, pero es buena práctica verificar el método.
-	if r.Method != http.MethodPost {
-		sendJSONError(w, "Método no permitido. Solo se acepta POST.", http.StatusMethodNotAllowed)
-		return
+// newSmtpConfig crea una configuración SMTP a partir de variables de entorno.
+func newSmtpConfig() (SmtpConfig, error) {
+	config := SmtpConfig{
+		Host:    os.Getenv("SMTP_HOST"),
+		Port:    os.Getenv("SMTP_PORT"),
+		User:    os.Getenv("SMTP_USER"),
+		Pass:    os.Getenv("SMTP_PASS"),
+		ToEmail: os.Getenv("TO_EMAIL"),
 	}
 
-	if err := r.ParseForm(); err != nil {
-		sendJSONError(w, "Error al procesar el formulario.", http.StatusBadRequest)
-		return
-	}
-
-	name := r.FormValue("name")
-	email := r.FormValue("email")
-	message := r.FormValue("message")
-
-	if name == "" || email == "" || message == "" {
-		sendJSONError(w, "Todos los campos (nombre, email, mensaje) son obligatorios.", http.StatusBadRequest)
-		return
-	}
-
-	// En Vercel, las variables de entorno se configuran en el dashboard del proyecto.
-	smtpHost := os.Getenv("SMTP_HOST")
-	smtpPort := os.Getenv("SMTP_PORT")
-	smtpUser := os.Getenv("SMTP_USER")
-	smtpPass := os.Getenv("SMTP_PASS")
-
-	toEmail := "grajajhon9@gmail.com"
-
-	if smtpHost == "" || smtpPort == "" || smtpUser == "" || smtpPass == "" {
+	if config.Host == "" || config.Port == "" || config.User == "" || config.Pass == "" {
 		log.Println("Error: Configuración SMTP incompleta en las variables de entorno de Vercel.")
-		sendJSONError(w, "Error de configuración del servidor para enviar el correo.", http.StatusInternalServerError)
-		return
+		return SmtpConfig{}, errors.New("error de configuración del servidor para enviar el correo. Contacte al administrador")
 	}
 
-	auth := smtp.PlainAuth("", smtpUser, smtpPass, smtpHost)
+	if config.ToEmail == "" {
+		config.ToEmail = "grajajhon9@gmail.com" // Fallback si no se configura TO_EMAIL
+		log.Println("Advertencia: TO_EMAIL no configurado. Usando el valor por defecto:", config.ToEmail)
+	}
+
+	return config, nil
+}
+
+// sendEmail construye y envía el correo electrónico.
+func sendEmail(config SmtpConfig, data ContactData) error {
+	auth := smtp.PlainAuth("", config.User, config.Pass, config.Host)
 
 	headers := "MIME-version: 1.0;\nContent-Type: text/plain; charset=\"UTF-8\";\n"
-	fromHeader := fmt.Sprintf("From: Softex Labs Contacto <%s>\r\n", smtpUser)
-	toHeader := fmt.Sprintf("To: %s\r\n", toEmail)
+	fromHeader := fmt.Sprintf("From: Softex Labs Contacto <%s>\r\n", config.User)
+	toHeader := fmt.Sprintf("To: %s\r\n", config.ToEmail)
 	subjectHeader := "Subject: Nuevo Mensaje de Contacto - Softex Labs\r\n"
 
 	msgBody := fmt.Sprintf("Has recibido un nuevo mensaje desde tu sitio web:\n\n"+
 		"Nombre: %s\n"+
 		"Email de Contacto: %s\n\n"+
-		"Mensaje:\n%s\n", name, email, message)
+		"Mensaje:\n%s\n", data.Name, data.Email, data.Message)
 
 	emailBody := fromHeader + toHeader + subjectHeader + headers + "\r\n" + msgBody
 
-	smtpAddr := fmt.Sprintf("%s:%s", smtpHost, smtpPort)
+	smtpAddr := fmt.Sprintf("%s:%s", config.Host, config.Port)
 
-	err := smtp.SendMail(smtpAddr, auth, smtpUser, []string{toEmail}, []byte(emailBody))
+	err := smtp.SendMail(smtpAddr, auth, config.User, []string{config.ToEmail}, []byte(emailBody))
 	if err != nil {
 		log.Printf("Error al enviar el correo: %v", err)
-		sendJSONError(w, "Hubo un error interno al intentar enviar el correo.", http.StatusInternalServerError)
+		return errors.New("hubo un error interno al intentar enviar el correo. Por favor, inténtelo de nuevo más tarde")
+	}
+
+	return nil
+}
+
+// parseAndValidateRequest extrae y valida los datos del formulario de la solicitud HTTP.
+func parseAndValidateRequest(r *http.Request) (ContactData, error) {
+	var data ContactData
+
+	contentType := r.Header.Get("Content-Type")
+	if contentType == "application/json" {
+		if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
+			return ContactData{}, errors.New("error al decodificar la solicitud JSON. Asegúrese de que el formato sea correcto")
+		}
+	} else {
+		if err := r.ParseForm(); err != nil {
+			return ContactData{}, errors.New("error al procesar el formulario. Asegúrese de que los datos estén bien formados")
+		}
+		data.Name = r.FormValue("name")
+		data.Email = r.FormValue("email")
+		data.Message = r.FormValue("message")
+	}
+
+	if data.Name == "" || data.Email == "" || data.Message == "" {
+		return ContactData{}, errors.New("todos los campos (nombre, email, mensaje) son obligatorios")
+	}
+
+	if !emailRegex.MatchString(data.Email) {
+		return ContactData{}, errors.New("el formato del correo electrónico no es válido")
+	}
+
+	return data, nil
+}
+
+// Handler es la función que Vercel ejecutará.
+func Handler(w http.ResponseWriter, r *http.Request) {
+	// Log para confirmar que la función fue invocada. Esto es clave para el diagnóstico.
+	log.Printf("Invocada función de contacto con método: %s", r.Method)
+
+	// Configurar cabeceras CORS para todas las respuestas.
+	// Esto es crucial para que los navegadores permitan las solicitudes desde tu frontend.
+	w.Header().Set("Access-Control-Allow-Origin", "*") // En producción, considera restringir esto a tu dominio: "https://softex-labs.vercel.app"
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	// Manejar la solicitud pre-vuelo (preflight) de CORS que envía el navegador.
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	if r.Method != http.MethodPost {
+		sendJSONError(w, "Método no permitido. Solo se acepta POST.", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// 1. Parsear y validar la solicitud
+	data, err := parseAndValidateRequest(r)
+	if err != nil {
+		sendJSONError(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// 2. Cargar la configuración
+	config, err := newSmtpConfig()
+	if err != nil {
+		sendJSONError(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// 3. Enviar el correo
+	err = sendEmail(config, data)
+	if err != nil {
+		sendJSONError(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	log.Println("Correo del formulario de contacto enviado exitosamente.")
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*") // CORS para Vercel
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]string{"message": "¡Mensaje enviado con éxito!"})
 }

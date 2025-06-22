@@ -96,7 +96,7 @@ func newSmtpConfig() (SmtpConfig, error) {
 	}
 
 	if config.ToEmail == "" {
-		config.ToEmail = "grajajhon9@gmail.com" // Fallback si no se configura TO_EMAIL
+		config.ToEmail = "contacto@softex-labs.xyz" // Fallback si no se configura TO_EMAIL
 		log.Println("Advertencia: TO_EMAIL no configurado. Usando el valor por defecto:", config.ToEmail)
 	}
 
@@ -181,7 +181,7 @@ func sendEmail(config SmtpConfig, data ContactData) error {
 		return err
 	}
 
-	// Combinamos todos los headers y el cuerpo del mensaje.
+	// Combina todos los headers y el cuerpo del mensaje.
 	emailBody := fromHeader + toHeader + replyToHeader + subjectHeader + headers + "\r\n" + msgBody
 
 	smtpAddr := fmt.Sprintf("%s:%s", config.Host, config.Port)

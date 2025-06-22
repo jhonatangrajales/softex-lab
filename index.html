@@ -2,68 +2,125 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario de Contacto</title>
-    <!-- Incluye la librería Alpine.js -->
+    <title>SOFTEX-LABS</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Alpine.js para la interactividad -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <!-- (Opcional) Estilos para que se vea mejor -->
-    <style>
-        body { font-family: sans-serif; display: grid; place-content: center; min-height: 100vh; margin: 0; background-color: #f3f4f6; }
-        .form-container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 400px; }
-        .form-group { margin-bottom: 1rem; }
-        label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
-        input, textarea { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        input.error-border, textarea.error-border { border-color: #991b1b; }
-        .error-text { color: #991b1b; font-size: 0.875rem; margin-top: 0.25rem; }
-        button { width: 100%; padding: 0.75rem; background-color: #2563eb; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; }
-        button:disabled { background-color: #9ca3af; }
-        .message { margin-top: 1rem; padding: 0.75rem; border-radius: 4px; }
-        .success { background-color: #d1fae5; color: #065f46; }
-        .error { background-color: #fee2e2; color: #991b1b; }
-    </style>
 </head>
 <body>
+    <header>
+        <div class="logo">SOFTEX-LABS</div>
+        <nav>
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
 
-<div class="form-container">
-    <h2>Contacto</h2>
-
-    <!-- Inicializa el componente Alpine.js. La lógica ahora viene de app.js -->
-    <div x-data="contactForm" class="w-full">
-        <!-- El formulario llama a la función `submitData` al enviarse -->
-        <form x-on:submit.prevent="submitData" novalidate>
-            <div class="form-group">
-                <label for="name">Nombre</label>
-                <input type="text" id="name" x-model="formData.name" :class="{'error-border': errors.name}">
-                <p x-show="errors.name" x-text="errors.name" class="error-text" style="display: none;"></p>
+    <main>
+        <section id="inicio" class="hero">
+            <div class="hero-content reveal-on-scroll">
+                <h1>Innovación y Desarrollo a tu Alcance</h1>
+                <p>Transformamos tus ideas en soluciones de software robustas y escalables.</p>
+                <a href="#contacto" class="cta-button">Contáctanos</a>
             </div>
+        </section>
 
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" x-model="formData.email" :class="{'error-border': errors.email}">
-                <p x-show="errors.email" x-text="errors.email" class="error-text" style="display: none;"></p>
+        <section id="servicios" class="services">
+            <h2 class="reveal-on-scroll">Nuestros Servicios</h2>
+            <div class="service-cards">
+                <div class="card reveal-on-scroll">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2210/2210153.png" alt="Desarrollo Web" class="card-icon">
+                    <h3>Desarrollo Web a Medida</h3>
+                    <p>Creamos aplicaciones web modernas y responsivas, utilizando las últimas tecnologías para garantizar una experiencia de usuario excepcional.</p>
+                </div>
+                <div class="card reveal-on-scroll">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1055/1055645.png" alt="Aplicaciones Móviles" class="card-icon">
+                    <h3>Aplicaciones Móviles</h3>
+                    <p>Desarrollamos aplicaciones nativas e híbridas para iOS y Android, enfocadas en el rendimiento y la usabilidad.</p>
+                </div>
+                <div class="card reveal-on-scroll">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2821/2821637.png" alt="Consultoría Tecnológica" class="card-icon">
+                    <h3>Consultoría Tecnológica</h3>
+                    <p>Te asesoramos para que tomes las mejores decisiones tecnológicas, optimizando tus procesos y maximizando tu retorno de inversión.</p>
+                </div>
             </div>
+        </section>
 
-            <div class="form-group">
-                <label for="message">Mensaje</label>
-                <textarea id="message" rows="4" x-model="formData.message" :class="{'error-border': errors.message}"></textarea>
-                <p x-show="errors.message" x-text="errors.message" class="error-text" style="display: none;"></p>
+        <section id="sobre-nosotros" class="about-us">
+            <div class="about-content reveal-on-scroll">
+                <h2>Sobre Nosotros</h2>
+                <p>
+                    En <strong>SOFTEX-LABS</strong>, somos un equipo de apasionados por la tecnología, comprometidos con la excelencia y la innovación. Nuestra misión es ayudar a empresas de todos los tamaños a alcanzar sus objetivos a través de soluciones de software de alta calidad. Creemos en la colaboración, la transparencia y en construir relaciones a largo plazo con nuestros clientes.
+                </p>
             </div>
+            <div class="about-image reveal-on-scroll">
+                <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1632&q=80" alt="Equipo de Softex Labs">
+            </div>
+        </section>
 
-            <!-- El botón con el texto "Enviar" y estado de carga -->
-            <button type="submit" :disabled="loading">
-                <span x-show="!loading">Enviar</span>
-                <span x-show="loading">Enviando...</span>
-            </button>
-        </form>
+        <section id="contacto" class="contact">
+            <div class="contact-container reveal-on-scroll">
+                <!--
+                  INICIO DEL FORMULARIO CORREGIDO
+                  Este es el bloque de código que hemos estado trabajando.
+                  Se integra perfectamente aquí.
+                -->
+                <div class="form-container">
+                    <h2>Contacto</h2>
 
-        <!-- Mensajes de éxito y error -->
-        <div x-show="successMessage" x-text="successMessage" class="message success" style="display: none;"></div>
-        <div x-show="errorMessage" x-text="errorMessage" class="message error" style="display: none;"></div>
-    </div>
-</div>
+                    <!-- Inicializa el componente Alpine.js. La lógica ahora viene de app.js -->
+                    <div x-data="contactForm" class="w-full">
+                        <!-- El formulario llama a la función `submitData` al enviarse -->
+                        <form x-on:submit.prevent="submitData" novalidate>
+                            <div class="form-group">
+                                <label for="name">Nombre</label>
+                                <input type="text" id="name" x-model="formData.name" :class="{'error-border': errors.name}">
+                                <p x-show="errors.name" x-text="errors.name" class="error-text" style="display: none;"></p>
+                            </div>
 
-<!-- Incluimos app.js que contiene la lógica del formulario -->
-<script src="app.js" defer></script>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" x-model="formData.email" :class="{'error-border': errors.email}">
+                                <p x-show="errors.email" x-text="errors.email" class="error-text" style="display: none;"></p>
+                            </div>
 
+                            <div class="form-group">
+                                <label for="message">Mensaje</label>
+                                <textarea id="message" rows="4" x-model="formData.message" :class="{'error-border': errors.message}"></textarea>
+                                <p x-show="errors.message" x-text="errors.message" class="error-text" style="display: none;"></p>
+                            </div>
+
+                            <!-- El botón con el texto "Enviar" y estado de carga -->
+                            <button type="submit" :disabled="loading">
+                                <span x-show="!loading">Enviar</span>
+                                <span x-show="loading">Enviando...</span>
+                            </button>
+                        </form>
+
+                        <!-- Mensajes de éxito y error -->
+                        <div x-show="successMessage" x-text="successMessage" class="message success" style="display: none;"></div>
+                        <div x-show="errorMessage" x-text="errorMessage" class="message error" style="display: none;"></div>
+                    </div>
+                </div>
+                <!-- FIN DEL FORMULARIO CORREGIDO -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; <span id="year"></span> SOFTEX-LABS. Todos los derechos reservados.</p>
+    </footer>
+
+    <!--
+      El script app.js ya contiene la lógica para el formulario,
+      el scroll y el año del footer.
+    -->
+    <script src="app.js" defer></script>
 </body>
 </html>

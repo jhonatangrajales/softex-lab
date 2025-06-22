@@ -60,21 +60,99 @@ func newSmtpConfig() (SmtpConfig, error) {
 	return config, nil
 }
 
+func formatEmailBody(data ContactData) string {
+	// Usamos comillas invertidas (backticks) para un string multilínea en Go.
+	emailTemplate := `<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Mensaje de Contacto - Softex Labs</title>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            width: 150px;
+            height: auto;
+        }
+        h1 {
+            color: #4f46e5;
+        }
+        .message {
+            margin-top: 20px;
+        }
+        .field {
+            margin-bottom: 10px;
+        }
+        .label {
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.8em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Nuevo Mensaje de Contacto</h1>
+        </div>
+        <div class="message">
+            <p>Has recibido un nuevo mensaje desde tu sitio web:</p>
+            <div class="field">
+                <span class="label">Nombre:</span> ` + data.Name + `
+            </div>
+            <div class="field">
+                <span class="label">Email de Contacto:</span> ` + data.Email + `
+            </div>
+            <div class="field">
+                <span class="label">Mensaje:</span>
+                <p>` + data.Message + `</p>
+            </div>
+        </div>
+        <div class="footer">
+            <p>&copy; ` + fmt.Sprintf("%d", 2024) + ` Softex Labs. Todos los derechos reservados.</p>
+        </div>
+    </div>
+</body>
+</html>`
+
+	return emailTemplate
+}
+
 // sendEmail construye y envía el correo electrónico.
 func sendEmail(config SmtpConfig, data ContactData) error {
 	auth := smtp.PlainAuth("", config.User, config.Pass, config.Host)
 
-	headers := "MIME-version: 1.0;\nContent-Type: text/plain; charset=\"UTF-8\";\n"
+	// Content-Type ahora es text/html para renderizar el HTML.
+	headers := "MIME-version: 1.0;\r\nContent-Type: text/html; charset=\"UTF-8\";\r\n"
 	fromHeader := fmt.Sprintf("From: Softex Labs Contacto <%s>\r\n", config.User)
 	toHeader := fmt.Sprintf("To: %s\r\n", config.ToEmail)
 	subjectHeader := "Subject: Nuevo Mensaje de Contacto - Softex Labs\r\n"
 
-	msgBody := fmt.Sprintf("Has recibido un nuevo mensaje desde tu sitio web:\r\n\r\n"+
-		"Nombre: %s\r\n"+
-		"Email de Contacto: %s\r\n\r\n"+
-		"Mensaje:\r\n%s\r\n", data.Name, data.Email, data.Message)
-
-	emailBody := fromHeader + toHeader + subjectHeader + headers + "\r\n" + msgBody
+	// Usamos la función para formatear el cuerpo del correo con la plantilla HTML.
+	emailBody := fromHeader + toHeader + subjectHeader + headers + "\r\n" + formatEmailBody(data)
 
 	smtpAddr := fmt.Sprintf("%s:%s", config.Host, config.Port)
 

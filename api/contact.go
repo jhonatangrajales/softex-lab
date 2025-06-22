@@ -167,11 +167,9 @@ func formatEmailBody(data ContactData) (string, error) {
 	return body.String(), nil
 }
 
-// sendEmail construye y envía el correo electrónico.
 func sendEmail(config SmtpConfig, data ContactData) error {
 	auth := smtp.PlainAuth("", config.User, config.Pass, config.Host)
 
-	// Content-Type ahora es text/html para renderizar el HTML.
 	headers := "MIME-version: 1.0;\r\nContent-Type: text/html; charset=\"UTF-8\";\r\n"
 	fromHeader := fmt.Sprintf("From: Softex Labs Contacto <%s>\r\n", config.User)
 	toHeader := fmt.Sprintf("To: %s\r\n", config.ToEmail)
@@ -201,7 +199,6 @@ func sendEmail(config SmtpConfig, data ContactData) error {
 func parseAndValidateRequest(r *http.Request) (ContactData, error) {
 	var data ContactData
 
-	// Ahora solo aceptamos JSON, lo que simplifica y estandariza el código.
 	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
 		return ContactData{}, errors.New("error al decodificar la solicitud JSON. Asegúrese de que el formato sea correcto")
 	}
@@ -218,7 +215,6 @@ func parseAndValidateRequest(r *http.Request) (ContactData, error) {
 }
 
 func getClientIP(r *http.Request) string {
-	// Vercel y otros proxies establecen esta cabecera.
 	ip := r.Header.Get("X-Forwarded-For")
 	if ip != "" {
 		return strings.Split(ip, ",")[0]
@@ -227,18 +223,21 @@ func getClientIP(r *http.Request) string {
 	return r.RemoteAddr
 }
 
-// Handler es la función que Vercel ejecutará.
+// Handler  función que Vercel ejecutará.
 func Handler(w http.ResponseWriter, r *http.Request) {
-	// Log para confirmar que la función fue invocada. Esto es clave para el diagnóstico.
-	log.Printf("Invocada función de contacto con método: %s", r.Method)
+	log.Printf("Invocada función de contacto con método: %s", r.Method) //para pruebas
 
-	// Configurar cabeceras CORS para todas las respuestas.
-	// Esto es crucial para que los navegadores permitan las solicitudes desde tu frontend.
-	w.Header().Set("Access-Control-Allow-Origin", "*") // En producción, considera restringir esto a tu dominio: "https://softex-labs.vercel.app"
+	// Configuración de CORS más segura y flexible a través de variables de entorno.
+	allowedOrigin := os.Getenv("ALLOWED_ORIGIN")
+	if allowedOrigin == "" {
+		// Fallback para desarrollo local si no está definida. En producción,
+		// se debe establecer la variable de entorno al dominio del frontend.
+		allowedOrigin = "*"
+	}
+	w.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
 	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
-	// Manejar la solicitud pre-vuelo (preflight) de CORS que envía el navegador.
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusOK)
 		return

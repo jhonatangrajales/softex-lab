@@ -28,7 +28,7 @@
     <h2>Contacto</h2>
 
     <!-- Inicializa el componente Alpine.js. La lógica ahora viene de app.js -->
-    <div x-data="contactForm()" class="w-full">
+    <div x-data="contactForm" class="w-full">
         <!-- El formulario llama a la función `submitData` al enviarse -->
         <form x-on:submit.prevent="submitData" novalidate>
             <div class="form-group">

@@ -1,7 +1,5 @@
-// Alpine.js component for the contact form
-// This function needs to be in the global scope for Alpine.js to find it via x-data="contactForm()".
-function contactForm() {
-    return {
+document.addEventListener('alpine:init', () => {
+    Alpine.data('contactForm', () => ({
         formData: {
             name: '',
             email: '',
@@ -89,8 +87,8 @@ function contactForm() {
                 this.loading = false;
             });
         }
-    }
-}
+    }));
+});
 
 // All other logic should run after the DOM is ready.
 document.addEventListener('DOMContentLoaded', () => {

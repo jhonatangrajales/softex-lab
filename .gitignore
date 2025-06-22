@@ -1,0 +1,18 @@
+# Archivos de entorno - ¡No subir a Git!
+.env
+
+# Binarios y ejecutables
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Binarios de test
+*.test
+
+# Archivos de cobertura
+*.out
+
+# Ejecutable de la aplicación
+/main

@@ -98,23 +98,21 @@ document.addEventListener('DOMContentLoaded', () => {
         yearSpan.textContent = new Date().getFullYear();
     }
 
-    // Scroll reveal animation logic
+    // Scroll reveal animation logic with IntersectionObserver for performance
     const scrollElements = document.querySelectorAll('.reveal-on-scroll');
     
-    const elementInView = (el, dividend = 1) => {
-        const elementTop = el.getBoundingClientRect().top;
-        return (elementTop <= (window.innerHeight || document.documentElement.clientHeight) / dividend);
-    };
-
-    const handleScrollAnimation = () => {
-        scrollElements.forEach((el) => {
-            if (elementInView(el, 1.25)) {
-                el.classList.add('is-visible');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            // When the element is in view, add the 'is-visible' class
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                // Optional: Stop observing the element once it's visible to save resources
+                observer.unobserve(entry.target);
             }
         });
-    };
+    }, { threshold: 0.1 }); // The callback will run when 10% of the target is visible
 
-    // Initial check on load and add scroll listener
-    handleScrollAnimation();
-    window.addEventListener('scroll', handleScrollAnimation);
+    scrollElements.forEach(el => {
+        observer.observe(el);
+    });
 });

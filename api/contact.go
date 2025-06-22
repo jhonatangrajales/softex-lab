@@ -69,10 +69,10 @@ func sendEmail(config SmtpConfig, data ContactData) error {
 	toHeader := fmt.Sprintf("To: %s\r\n", config.ToEmail)
 	subjectHeader := "Subject: Nuevo Mensaje de Contacto - Softex Labs\r\n"
 
-	msgBody := fmt.Sprintf("Has recibido un nuevo mensaje desde tu sitio web:\n\n"+
-		"Nombre: %s\n"+
-		"Email de Contacto: %s\n\n"+
-		"Mensaje:\n%s\n", data.Name, data.Email, data.Message)
+	msgBody := fmt.Sprintf("Has recibido un nuevo mensaje desde tu sitio web:\r\n\r\n"+
+		"Nombre: %s\r\n"+
+		"Email de Contacto: %s\r\n\r\n"+
+		"Mensaje:\r\n%s\r\n", data.Name, data.Email, data.Message)
 
 	emailBody := fromHeader + toHeader + subjectHeader + headers + "\r\n" + msgBody
 

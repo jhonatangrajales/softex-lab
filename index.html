@@ -1,120 +1,228 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOFTEX-LABS</title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- Alpine.js para la interactividad -->
+    <title>Softex Labs - Desarrollo de Software a Medida</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Alpine.js for interactivity -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        /* Applying Montserrat font */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0c0a18; /* A very dark purple-blue for the base */
+        }
+
+        /* Custom gradient text */
+        .gradient-text {
+            background: linear-gradient(90deg, #4f46e5, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Glassmorphism effect for cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Animation for scroll reveal */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
-<body>
-    <header>
-        <div class="logo">SOFTEX-LABS</div>
-        <nav>
-            <ul>
-                <li><a href="#inicio">Inicio</a></li>
-                <li><a href="#servicios">Servicios</a></li>
-                <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
-                <li><a href="#contacto">Contacto</a></li>
-            </ul>
+<body class="text-gray-200" x-data="{ mobileMenuOpen: false }">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" x-data="{ scrolled: false }" @scroll.window="scrolled = (window.scrollY > 50)">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center" :class="{ 'bg-slate-900/80 backdrop-blur-sm shadow-lg rounded-xl mt-2': scrolled }">
+            <!-- Logo -->
+            <a href="#" class="flex items-center space-x-2">
+                <svg class="h-10 w-10 text-violet-400" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M73.45,25C86.7,25 95,35.82 95,49.5C95,63.18 86.7,75 73.45,75C60.2,75 50.11,63.18 50.11,49.5C50.11,40.12 55.43,30.2 65,26.5" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M26.55,75C13.3,75 5,64.18 5,50.5C5,36.82 13.3,25 26.55,25C39.8,25 49.89,36.82 49.89,50.5C49.89,59.88 44.57,69.8 35,73.5" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="text-2xl font-black tracking-widest text-white">SOFTEX LABS</span>
+            </a>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#mision" class="hover:text-violet-400 transition-colors">Nosotros</a>
+                <a href="#valores" class="hover:text-violet-400 transition-colors">Valores</a>
+                <a href="#contacto" class="bg-violet-600 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded-lg transition-transform duration-300 ease-in-out hover:scale-105">Contacto</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden">
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-white focus:outline-none">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
         </nav>
+        
+        <!-- Mobile Menu -->
+        <div x-show="mobileMenuOpen" @click.away="mobileMenuOpen = false" x-transition class="md:hidden bg-slate-900/95 backdrop-blur-sm p-6">
+            <a href="#mision" class="block py-2 text-center text-lg hover:text-violet-400">Nosotros</a>
+            <a href="#valores" class="block py-2 text-center text-lg hover:text-violet-400">Valores</a>
+            <a href="#contacto" class="block mt-4 w-full bg-violet-600 hover:bg-violet-500 text-white font-bold py-3 px-4 rounded-lg text-center">Contacto</a>
+        </div>
     </header>
 
+    <!-- Main Content -->
     <main>
-        <section id="inicio" class="hero">
-            <div class="hero-content reveal-on-scroll">
-                <h1>Innovación y Desarrollo a tu Alcance</h1>
-                <p>Transformamos tus ideas en soluciones de software robustas y escalables.</p>
-                <a href="#contacto" class="cta-button">Contáctanos</a>
-            </div>
-        </section>
-
-        <section id="servicios" class="services">
-            <h2 class="reveal-on-scroll">Nuestros Servicios</h2>
-            <div class="service-cards">
-                <div class="card reveal-on-scroll">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2210/2210153.png" alt="Desarrollo Web" class="card-icon">
-                    <h3>Desarrollo Web a Medida</h3>
-                    <p>Creamos aplicaciones web modernas y responsivas, utilizando las últimas tecnologías para garantizar una experiencia de usuario excepcional.</p>
+        <!-- Hero Section -->
+        <section class="min-h-screen flex items-center justify-center text-center bg-gradient-to-br from-indigo-900 via-slate-900 to-black">
+            <div class="container mx-auto px-6">
+                <div class="w-32 h-32 mx-auto mb-6">
+                    <svg class="h-full w-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                         <defs>
+                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#4f46e5;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M73.45,25C86.7,25 95,35.82 95,49.5C95,63.18 86.7,75 73.45,75C60.2,75 50.11,63.18 50.11,49.5C50.11,40.12 55.43,30.2 65,26.5" stroke="url(#logoGradient)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M26.55,75C13.3,75 5,64.18 5,50.5C5,36.82 13.3,25 26.55,25C39.8,25 49.89,36.82 49.89,50.5C49.89,59.88 44.57,69.8 35,73.5" stroke="url(#logoGradient)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                 </div>
-                <div class="card reveal-on-scroll">
-                    <img src="https://cdn-icons-png.flaticon.com/512/1055/1055645.png" alt="Aplicaciones Móviles" class="card-icon">
-                    <h3>Aplicaciones Móviles</h3>
-                    <p>Desarrollamos aplicaciones nativas e híbridas para iOS y Android, enfocadas en el rendimiento y la usabilidad.</p>
-                </div>
-                <div class="card reveal-on-scroll">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2821/2821637.png" alt="Consultoría Tecnológica" class="card-icon">
-                    <h3>Consultoría Tecnológica</h3>
-                    <p>Te asesoramos para que tomes las mejores decisiones tecnológicas, optimizando tus procesos y maximizando tu retorno de inversión.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="sobre-nosotros" class="about-us">
-            <div class="about-content reveal-on-scroll">
-                <h2>Sobre Nosotros</h2>
-                <p>
-                    En <strong>SOFTEX-LABS</strong>, somos un equipo de apasionados por la tecnología, comprometidos con la excelencia y la innovación. Nuestra misión es ayudar a empresas de todos los tamaños a alcanzar sus objetivos a través de soluciones de software de alta calidad. Creemos en la colaboración, la transparencia y en construir relaciones a largo plazo con nuestros clientes.
+                <h1 class="text-4xl md:text-6xl font-black tracking-wider uppercase text-white reveal-on-scroll">
+                    SOFTEX LABS
+                </h1>
+                <p class="mt-4 text-lg md:text-2xl font-light text-violet-300 max-w-3xl mx-auto reveal-on-scroll">
+                    Transformamos tus ideas en <span class="font-bold gradient-text">soluciones de software</span> innovadoras y confiables.
                 </p>
             </div>
-            <div class="about-image reveal-on-scroll">
-                <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1632&q=80" alt="Equipo de Softex Labs">
+        </section>
+
+        <!-- Mision y Vision Section -->
+        <section id="mision" class="py-20 md:py-32">
+            <div class="container mx-auto px-6">
+                <div class="grid md:grid-cols-2 gap-16 items-center">
+                    <div class="reveal-on-scroll">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">Nuestra Misión</h2>
+                        <p class="text-lg leading-relaxed">
+                            En Softex Labs, nuestro propósito es transformar las ideas de nuestros clientes en soluciones de software a medida innovadoras y confiables, impulsando su crecimiento y eficiencia a través de tecnología de vanguardia y un enfoque colaborativo.
+                        </p>
+                    </div>
+                    <div class="reveal-on-scroll">
+                         <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">Nuestra Visión</h2>
+                        <p class="text-lg leading-relaxed">
+                           Imaginar un futuro donde Softex Labs es sinónimo de agilidad y visión tecnológica, desarrollando las herramientas que permitan a las empresas adaptarse y prosperar en un mundo digital en constante cambio, siempre con un enfoque humano y de confianza.
+                        </p>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section id="contacto" class="contact">
-            <div class="contact-container reveal-on-scroll">
-                <!--
-                  INICIO DEL FORMULARIO CORREGIDO
-                  Este es el bloque de código que hemos estado trabajando.
-                  Se integra perfectamente aquí.
-                -->
-                <div class="form-container">
-                    <h2>Contacto</h2>
+        <!-- Valores Section -->
+        <section id="valores" class="py-20 md:py-32 bg-slate-900/50">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-16 gradient-text reveal-on-scroll">Nuestros Valores</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Valor 1: Innovación -->
+                    <div class="glass-card p-8 rounded-2xl reveal-on-scroll">
+                        <div class="text-violet-400 mb-4">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2 text-white">Innovación Continua</h3>
+                        <p>Búsqueda constante de nuevas formas de mejorar, explorar tecnologías emergentes y ofrecer soluciones que anticipen el futuro.</p>
+                    </div>
 
-                    <!-- Inicializa el componente Alpine.js. La lógica ahora viene de app.js -->
-                    <div x-data="contactForm" class="w-full">
-                        <!-- El formulario llama a la función `submitData` al enviarse -->
-                        <form x-on:submit.prevent="submitData" novalidate>
-                            <div class="form-group">
-                                <label for="name">Nombre</label>
-                                <input type="text" id="name" x-model="formData.name" :class="{'error-border': errors.name}">
-                                <p x-show="errors.name" x-text="errors.name" class="error-text" style="display: none;"></p>
-                            </div>
+                    <!-- Valor 2: Transparencia -->
+                    <div class="glass-card p-8 rounded-2xl reveal-on-scroll" style="transition-delay: 150ms;">
+                        <div class="text-violet-400 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2 text-white">Transparencia y Confianza</h3>
+                        <p>Honestidad y apertura en todas las interacciones, construyendo relaciones basadas en credibilidad y comunicación clara.</p>
+                    </div>
 
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" id="email" x-model="formData.email" :class="{'error-border': errors.email}">
-                                <p x-show="errors.email" x-text="errors.email" class="error-text" style="display: none;"></p>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="message">Mensaje</label>
-                                <textarea id="message" rows="4" x-model="formData.message" :class="{'error-border': errors.message}"></textarea>
-                                <p x-show="errors.message" x-text="errors.message" class="error-text" style="display: none;"></p>
-                            </div>
-
-                            <!-- El botón con el texto "Enviar" y estado de carga -->
-                            <button type="submit" :disabled="loading">
-                                <span x-show="!loading">Enviar</span>
-                                <span x-show="loading">Enviando...</span>
-                            </button>
-                        </form>
-
-                        <!-- Mensajes de éxito y error -->
-                        <div x-show="successMessage" x-text="successMessage" class="message success" style="display: none;"></div>
-                        <div x-show="errorMessage" x-text="errorMessage" class="message error" style="display: none;"></div>
+                    <!-- Valor 3: Calidad -->
+                    <div class="glass-card p-8 rounded-2xl reveal-on-scroll" style="transition-delay: 300ms;">
+                         <div class="text-violet-400 mb-4">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2 text-white">Excelencia y Calidad</h3>
+                        <p>Compromiso inquebrantable con la entrega de software robusto, eficiente y de alta calidad que supere las expectativas.</p>
                     </div>
                 </div>
-                <!-- FIN DEL FORMULARIO CORREGIDO -->
+            </div>
+        </section>
+
+        <!-- Contacto Section -->
+        <section id="contacto" class="py-20 md:py-32">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold gradient-text reveal-on-scroll">Hablemos de tu Proyecto</h2>
+                    <p class="mt-4 text-lg max-w-2xl mx-auto reveal-on-scroll">¿Listo para empezar? Envíanos un mensaje y nos pondremos en contacto.</p>
+                </div>
+
+                <div class="max-w-2xl mx-auto reveal-on-scroll" x-data="contactForm">
+                    <!-- Mensajes de éxito y error -->
+                    <div x-show="successMessage" x-transition class="glass-card p-8 rounded-2xl text-center mb-6">
+                        <h3 class="text-2xl font-bold text-green-400 mb-2">¡Mensaje Enviado!</h3>
+                        <p x-text="successMessage">Gracias por contactarnos. Nos comunicaremos contigo a la brevedad.</p>
+                    </div>
+                    <div x-show="errorMessage" x-transition class="glass-card p-8 rounded-2xl text-center mb-6 bg-red-500/20 border-red-500/50">
+                        <h3 class="text-2xl font-bold text-red-400 mb-2">Error</h3>
+                        <p x-text="errorMessage"></p>
+                    </div>
+
+                    <!-- El formulario funcional -->
+                    <form x-on:submit.prevent="submitData" x-show="!successMessage" class="space-y-6" novalidate>
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-violet-300 mb-2">Nombre Completo</label>
+                            <input type="text" id="name" x-model="formData.name" required class="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all" :class="{'border-red-500': errors.name}">
+                            <p x-show="errors.name" x-text="errors.name" class="text-red-400 text-sm mt-1"></p>
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-violet-300 mb-2">Correo Electrónico</label>
+                            <input type="email" id="email" x-model="formData.email" required class="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all" :class="{'border-red-500': errors.email}">
+                            <p x-show="errors.email" x-text="errors.email" class="text-red-400 text-sm mt-1"></p>
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-violet-300 mb-2">¿Cómo podemos ayudarte?</label>
+                            <textarea id="message" rows="5" x-model="formData.message" required class="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all" :class="{'border-red-500': errors.message}"></textarea>
+                            <p x-show="errors.message" x-text="errors.message" class="text-red-400 text-sm mt-1"></p>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" :disabled="loading" class="w-full md:w-auto bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold py-3 px-12 rounded-lg transition-transform duration-300 ease-in-out hover:scale-105 shadow-lg shadow-violet-500/20 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <span x-show="!loading">Enviar Mensaje</span>
+                                <span x-show="loading">Enviando...</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; <span id="year"></span> SOFTEX-LABS. Todos los derechos reservados.</p>
+        <p>&copy; <span id="year"></span> Softex Labs. Todos los derechos reservados.</p>
+        <p class="text-sm mt-2">Diseñando el futuro del software, una línea de código a la vez.</p>
     </footer>
 
     <!--

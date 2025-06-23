@@ -219,7 +219,7 @@
         
                     <!-- Tarjeta de Servicio 1 -->
                     <div class="glass-card p-8 rounded-2xl text-center transform hover:-translate-y-2 transition-transform duration-300 reveal-on-scroll">
-                        <div class="mb-5 inline-block p-4 rounded-full">
+                        <div class="mb-5 inline-block p-4 rounded-full" aria-hidden="true">
                             <svg class="w-10 h-10 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V7a2 2 0 012-2h5l4 4v10a2 2 0 01-2 2z"></path></svg>
                         </div>
                         <h3 class="text-xl font-semibold text-white mb-3">Soluciones de Gestión Empresarial</h3>
@@ -229,7 +229,7 @@
                     </div>
         
                     <!-- Tarjeta de Servicio 2 -->
-                    <div class="glass-card p-8 rounded-2xl text-center transform hover:-translate-y-2 transition-transform duration-300 reveal-on-scroll" style="transition-delay: 150ms;">
+                    <div class="glass-card p-8 rounded-2xl text-center transform hover:-translate-y-2 transition-transform duration-300 reveal-on-scroll" style="transition-delay: 150ms;" aria-hidden="true">
                         <div class="mb-5 inline-block p-4 rounded-full">
                             <svg class="w-10 h-10 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
                         </div>
@@ -240,7 +240,7 @@
                     </div>
         
                     <!-- Tarjeta de Servicio 3 -->
-                    <div class="glass-card p-8 rounded-2xl text-center transform hover:-translate-y-2 transition-transform duration-300 reveal-on-scroll" style="transition-delay: 300ms;">
+                    <div class="glass-card p-8 rounded-2xl text-center transform hover:-translate-y-2 transition-transform duration-300 reveal-on-scroll" style="transition-delay: 300ms;" aria-hidden="true">
                         <div class="mb-5 inline-block p-4 rounded-full">
                             <svg class="w-10 h-10 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h6m-6 4h6m-6 4h6"></path></svg>
                         </div>
@@ -275,19 +275,19 @@
                     <!--formulario -->
                     <form x-on:submit.prevent="submitData" x-show="!successMessage" class="space-y-6" novalidate>
                         <div>
-                            <label for="name" class="block text-sm font-medium text-violet-300 mb-2">Nombre Completo</label>
-                            <input type="text" id="name" x-model="formData.name" x-on:input="validateField('name')" required class="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all" :class="{'border-red-500': errors.name}">
-                            <p x-show="errors.name" x-text="errors.name" class="text-red-400 text-sm mt-1"></p>
+                            <label for="name" class="block text-sm font-medium text-violet-300 mb-2">Nombre Completo <span class="text-red-500">*</span></label>
+                            <input type="text" id="name" x-model="formData.name" x-on:input="validateField('name')" required class="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all" :class="{'border-red-500': errors.name}" :aria-invalid="errors.name ? 'true' : 'false'" aria-describedby="name-error">
+                            <p id="name-error" x-show="errors.name" x-text="errors.name" class="text-red-400 text-sm mt-1"></p>
                         </div>
                         <div>
-                            <label for="email" class="block text-sm font-medium text-violet-300 mb-2">Correo Electrónico</label>
-                            <input type="email" id="email" x-model="formData.email" x-on:input="validateField('email')" required class="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all" :class="{'border-red-500': errors.email}">
-                            <p x-show="errors.email" x-text="errors.email" class="text-red-400 text-sm mt-1"></p>
+                            <label for="email" class="block text-sm font-medium text-violet-300 mb-2">Correo Electrónico <span class="text-red-500">*</span></label>
+                            <input type="email" id="email" x-model="formData.email" x-on:input="validateField('email')" required class="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all" :class="{'border-red-500': errors.email}" :aria-invalid="errors.email ? 'true' : 'false'" aria-describedby="email-error">
+                            <p id="email-error" x-show="errors.email" x-text="errors.email" class="text-red-400 text-sm mt-1"></p>
                         </div>
                         <div>
-                            <label for="message" class="block text-sm font-medium text-violet-300 mb-2">¿Cómo podemos ayudarte?</label>
-                            <textarea id="message" rows="5" x-model="formData.message" x-on:input="validateField('message')" required class="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all" :class="{'border-red-500': errors.message}"></textarea>
-                            <p x-show="errors.message" x-text="errors.message" class="text-red-400 text-sm mt-1"></p>
+                            <label for="message" class="block text-sm font-medium text-violet-300 mb-2">¿Cómo podemos ayudarte? <span class="text-red-500">*</span></label>
+                            <textarea id="message" rows="5" x-model="formData.message" x-on:input="validateField('message')" required class="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all" :class="{'border-red-500': errors.message}" :aria-invalid="errors.message ? 'true' : 'false'" aria-describedby="message-error"></textarea>
+                            <p id="message-error" x-show="errors.message" x-text="errors.message" class="text-red-400 text-sm mt-1"></p>
                         </div>
                         <div class="text-center">
                             <button type="submit" :disabled="loading" class="w-full md:w-auto bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold py-3 px-12 rounded-lg transition-transform duration-300 ease-in-out hover:scale-105 shadow-lg shadow-violet-500/20 disabled:opacity-50 disabled:cursor-not-allowed">
@@ -322,13 +322,13 @@
                     <!-- WhatsApp -->
                     <div class="glass-card p-8 rounded-2xl reveal-on-scroll flex items-start space-x-4" style="transition-delay: 150ms;">
                         <div class="text-violet-400 flex-shrink-0 mt-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                             </svg>
                         </div>
                         <div>
                             <h4 class="text-xl font-bold text-white mb-1">WhatsApp</h4>
-                            <a href="https://wa.me/573178334370" target="_blank" rel="noopener noreferrer" class="text-violet-300 hover:text-violet-200 transition-colors">+57 317 8334370</a>
+                            <a href="https://wa.me/573178334370" target="_blank" rel="noopener noreferrer" class="text-violet-300 hover:text-violet-200 transition-colors" aria-label="Enviar mensaje por WhatsApp (se abre en una nueva pestaña)">+57 317 8334370</a>
                         </div>
                     </div>
 

@@ -32,7 +32,7 @@ type SmtpConfig struct {
 	ToEmail string
 }
 
-// emailRegex es una expresión regular simple para validar el formato del correo electrónico.
+// emailRegex es una expresión regular para validar el formato del correo electrónico.
 var emailRegex = regexp.MustCompile(`^[^\s@]+@[^\s@]+\.[^\s@]+$`)
 
 // --- Rate Limiter ---

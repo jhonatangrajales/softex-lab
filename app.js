@@ -54,47 +54,42 @@ document.addEventListener('alpine:init', () => {
             return isNameValid && isEmailValid && isMessageValid;
         },
 
-        submitData() {
+        async submitData() {
             this.successMessage = '';
             this.errorMessage = '';
 
             if (!this.validate()) {
-                return; // Stop if validation fails
+                return;
             }
 
             this.loading = true;
-            fetch('/api/contact', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(this.formData)
-            })
-            .then(response => {
+
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(this.formData)
+                });
+
+                const data = await response.json();
+
                 if (!response.ok) {
-                    // Intenta obtener el error del cuerpo JSON, si falla, usa un mensaje genérico.
-                    return response.json()
-                        .then(data => { throw new Error(data.error || `Error del servidor: ${response.status}`); })
-                        .catch(() => { throw new Error(`Error del servidor: ${response.status}. La API no está disponible o no responde correctamente.`); });
+                    throw new Error(data.error || `Error del servidor: ${response.status}`);
                 }
-                return response.json();
-            })
-            .then(data => {
+
                 this.successMessage = data.message || '¡Mensaje enviado con éxito! Puedes enviar otro si lo deseas.';
-                this.formData.name = '';
-                this.formData.email = '';
-                this.formData.message = ''; // Limpia el formulario
-                this.validate();
+                this.formData = { name: '', email: '', message: '' }; // Limpia el formulario
+                this.errors = { name: '', email: '', message: '' }; // Limpia los errores
                 setTimeout(() => {
                     this.successMessage = '';
                 }, 5000);
-            })
-            .catch((err) => {
-                this.errorMessage = err.message;
-            })
-            .finally(() => {
+            } catch (error) {
+                this.errorMessage = error.message || 'No se pudo enviar el mensaje. Inténtalo de nuevo más tarde.';
+            } finally {
                 this.loading = false;
-            });
+            }
         }
     }));
 });
@@ -115,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // When the element is in view, add the 'is-visible' class
             if (entry.isIntersecting) {
                 entry.target.classList.add('is-visible');
-                // Optional: Stop observing the element once it's visible to save resources
+                // Stop observing the element once it's visible to save resources
                 observer.unobserve(entry.target);
             }
         });

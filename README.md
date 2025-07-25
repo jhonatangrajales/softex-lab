@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # -SOFTEX-LABS-
 
 Este es el repositorio para el landing page de Softex Labs, una aplicación web estática con un backend serverless en Go para el formulario de contacto, desplegada en Vercel.
@@ -20,3 +21,7 @@ Ve a `Settings` > `Environment Variables` en tu proyecto de Vercel y añade las 
     -   **Ejemplo en desarrollo:** ` https://softex-labs.vercel.app` 
 
 Sin estas variables, la función serverless (`/api/contact`) fallará.
+=======
+# restaurantes
+aplicacion para gestion de pedidos en restarantes
+>>>>>>> 0efa3858ba570f1a58be9079b6dea9cd4c833c54

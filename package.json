@@ -4,8 +4,8 @@
   "description": "Landing page mejorada para Softex Labs con funcionalidades avanzadas",
   "main": "app.js",
   "scripts": {
-    "dev": "npx http-server . -p 3000",
-    "build": "echo 'Build completed'",
+    "dev": "npx http-server public -p 3000",
+    "build": "mkdir -p public && cp index.html styles.css app.js sw.js site.webmanifest public/",
     "test": "echo 'Frontend tests would go here'",
     "lint": "echo 'Linting would go here'",
     "deploy": "vercel --prod"
@@ -31,9 +31,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/softex-labs/landing.git"
-  },
-  "bugs": {
-    "url": "https://github.com/softex-labs/landing/issues"
   },
   "homepage": "https://softex-labs.xyz"
 }

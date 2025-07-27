@@ -38,15 +38,21 @@
 
 ```
 ├── README.md                 # Documentación principal
-├── index.html               # Landing page mejorada
-├── styles.css               # Estilos CSS separados
-├── app.js                   # JavaScript mejorado
-├── sw.js                    # Service Worker para PWA
-├── site.webmanifest         # Manifest para PWA
+├── index.html               # Landing page fuente
+├── styles.css               # Estilos CSS fuente
+├── app.js                   # JavaScript fuente
+├── sw.js                    # Service Worker fuente
+├── site.webmanifest         # Manifest fuente
+├── public/                  # Archivos compilados para deployment
+│   ├── index.html
+│   ├── styles.css
+│   ├── app.js
+│   ├── sw.js
+│   └── site.webmanifest
 ├── vercel.json              # Configuración de Vercel
 ├── .vercelignore            # Archivos a ignorar en deployment
 ├── go.mod                   # Dependencias Go
-├── package.json             # Dependencias Node.js
+├── package.json             # Dependencias Node.js y scripts
 ├── api/
 │   ├── contact/
 │   │   └── index.go         # Handler de contacto
@@ -73,7 +79,8 @@ ALLOWED_ORIGIN=https://tu-dominio.vercel.app
 
 ### Paso 1: Preparar el Repositorio
 1. Asegúrate de que todos los archivos estén en tu repositorio Git
-2. Haz commit y push de todos los cambios
+2. Ejecuta `npm run build` para generar el directorio `public/`
+3. Haz commit y push de todos los cambios (incluyendo `public/`)
 
 ### Paso 2: Conectar a Vercel
 1. Ve a [vercel.com](https://vercel.com) e inicia sesión
@@ -94,8 +101,9 @@ En el dashboard de Vercel, ve a `Settings` > `Environment Variables` y añade:
 
 ### Paso 4: Deploy
 1. Haz clic en "Deploy"
-2. Vercel detectará automáticamente la configuración Go
-3. El deployment debería completarse sin errores
+2. Vercel ejecutará `npm run build` automáticamente
+3. Los archivos estáticos se servirán desde `public/`
+4. Las funciones Go se desplegarán como serverless functions
 
 ## 🔍 Verificar el Deployment
 
@@ -128,18 +136,28 @@ curl -X POST https://tu-dominio.vercel.app/api/contact \
 
 ## 🧪 Testing Local
 
-Para probar localmente, puedes usar:
-
 ```bash
-# Instalar Vercel CLI
+# Instalar dependencias
+npm install
+
+# Ejecutar build
+npm run build
+
+# Servidor local para desarrollo
+npm run dev
+
+# O usar Vercel CLI
 npm i -g vercel
-
-# Ejecutar localmente
 vercel dev
-
-# O usar un servidor HTTP simple
-npx http-server . -p 3000
 ```
+
+## 🛠️ Scripts Disponibles
+
+- `npm run build` - Compila archivos estáticos a `public/`
+- `npm run dev` - Servidor local en puerto 3000
+- `npm run deploy` - Deploy directo a Vercel
+- `npm test` - Placeholder para tests
+- `npm run lint` - Placeholder para linting
 
 ## 🛡️ Seguridad
 
@@ -173,6 +191,11 @@ Edita `index.html` para cambiar textos, servicios y información de contacto.
 
 ## 🔧 Troubleshooting
 
+### Error: "No Output Directory named 'public' found"
+- Ejecuta `npm run build` antes del deployment
+- Asegúrate de que el directorio `public/` esté en tu repositorio
+- Verifica que `package.json` tenga el script de build correcto
+
 ### Error: "Origen no permitido"
 - Verifica que `ALLOWED_ORIGIN` coincida exactamente con tu dominio
 - Para desarrollo local, usa `ALLOWED_ORIGIN=*`
@@ -191,11 +214,6 @@ Edita `index.html` para cambiar textos, servicios y información de contacto.
 - Los archivos Go deben estar en `api/nombre/index.go`
 - Cada función debe usar `package handler`
 
-### Error: "Handler redeclared"
-- Cada función serverless debe estar en su propio directorio
-- Estructura correcta: `api/contact/index.go` y `api/health/index.go`
-- Ambos archivos usan `package handler` pero están separados
-
 ## 📞 Soporte
 
 Para soporte técnico o consultas sobre las mejoras implementadas:
@@ -205,9 +223,9 @@ Para soporte técnico o consultas sobre las mejoras implementadas:
 
 ## 🚀 Endpoints Disponibles
 
+- `GET /` - Landing page principal (desde `public/`)
 - `GET /api/health` - Health check del servicio
 - `POST /api/contact` - Envío de formulario de contacto
-- `GET /` - Landing page principal
 
 ---
 

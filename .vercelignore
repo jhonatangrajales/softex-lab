@@ -5,12 +5,15 @@ node_modules/
 *.log
 .env*
 
-# Archivos de test
-*_test.go
-coverage.out
-
 # Archivos temporales
 *.tmp
 *.temp
 .DS_Store
 Thumbs.db
+
+# Archivos fuente (se copian a public/)
+# index.html
+# styles.css
+# app.js
+# sw.js
+# site.webmanifest

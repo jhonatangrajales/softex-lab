@@ -141,7 +141,7 @@ func checkRateLimit(clientIP string) error {
 	defer mu.Unlock()
 
 	now := time.Now()
-
+	
 	// Limpiar entradas antiguas
 	for ip, info := range visitors {
 		if now.Sub(info.firstSeen) > timeWindow {
@@ -177,7 +177,7 @@ func getClientIP(r *http.Request) string {
 	if ip := r.Header.Get("X-Real-IP"); ip != "" {
 		return ip
 	}
-
+	
 	// Fallback a RemoteAddr
 	ip := r.RemoteAddr
 	if colon := strings.LastIndex(ip, ":"); colon != -1 {
@@ -238,18 +238,18 @@ func formatEmailBody(data ContactData, clientIP string) (string, error) {
 </body>
 </html>`
 
-	return fmt.Sprintf(template,
-		data.Name,
-		data.Email,
-		clientIP,
-		time.Now().Format("2006-01-02 15:04:05"),
+	return fmt.Sprintf(template, 
+		data.Name, 
+		data.Email, 
+		clientIP, 
+		time.Now().Format("2006-01-02 15:04:05"), 
 		strings.ReplaceAll(data.Message, "\n", "<br>")), nil
 }
 
 // Función para enviar email
 func sendEmail(config SmtpConfig, data ContactData, clientIP string) error {
 	subject := fmt.Sprintf("Nuevo mensaje de contacto de %s", data.Name)
-
+	
 	body, err := formatEmailBody(data, clientIP)
 	if err != nil {
 		return fmt.Errorf("error al formatear el cuerpo del email: %v", err)
@@ -312,7 +312,7 @@ func sendEmail(config SmtpConfig, data ContactData, clientIP string) error {
 // Función para parsear y validar la request
 func parseAndValidateRequest(r *http.Request) (ContactData, error) {
 	var data ContactData
-
+	
 	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
 		return data, fmt.Errorf("error al decodificar JSON: %v", err)
 	}
@@ -344,11 +344,11 @@ func sendJSONSuccess(w http.ResponseWriter, message string) {
 	})
 }
 
-// Handler principal - Esta es la función que Vercel llamará
-func Handler(w http.ResponseWriter, r *http.Request) {
+// Contact - Handler principal para Vercel (nombre de función exportada)
+func Contact(w http.ResponseWriter, r *http.Request) {
 	startTime := time.Now()
 	clientIP := getClientIP(r)
-
+	
 	log.Printf("Solicitud recibida - Método: %s, IP: %s", r.Method, clientIP)
 
 	// Configuración de CORS más segura
@@ -356,7 +356,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	if allowedOrigin == "" {
 		allowedOrigin = "https://softex-labs.xyz"
 	}
-
+	
 	// Verificar origen solo para requests que no sean OPTIONS
 	if r.Method != http.MethodOptions {
 		origin := r.Header.Get("Origin")
@@ -365,7 +365,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-
+	
 	w.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
 	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
@@ -414,6 +414,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	duration := time.Since(startTime)
 	log.Printf("Correo enviado exitosamente - IP: %s, Duración: %v", clientIP, duration)
-
+	
 	sendJSONSuccess(w, "¡Mensaje enviado con éxito! Te responderemos pronto.")
 }

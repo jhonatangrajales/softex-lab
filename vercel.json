@@ -1,23 +1,4 @@
 {
-  "version": 2,
   "buildCommand": "npm run build",
-  "outputDirectory": "public",
-  "functions": {
-    "api/contact/index.go": {
-      "runtime": "@vercel/go@3.0.0"
-    },
-    "api/health/index.go": {
-      "runtime": "@vercel/go@3.0.0"
-    }
-  },
-  "routes": [
-    {
-      "src": "/api/contact",
-      "dest": "/api/contact/index.go"
-    },
-    {
-      "src": "/api/health", 
-      "dest": "/api/health/index.go"
-    }
-  ]
+  "outputDirectory": "public"
 }

@@ -14,8 +14,8 @@ type HealthResponse struct {
 	Service   string    `json:"service"`
 }
 
-// Handler para health check - Esta es la función que Vercel llamará
-func Handler(w http.ResponseWriter, r *http.Request) {
+// Health - Handler para health check (nombre de función exportada)
+func Health(w http.ResponseWriter, r *http.Request) {
 	// CORS headers
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")

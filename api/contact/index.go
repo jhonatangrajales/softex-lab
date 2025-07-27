@@ -1,4 +1,4 @@
-package api
+package handler
 
 import (
 	"crypto/tls"
@@ -344,7 +344,7 @@ func sendJSONSuccess(w http.ResponseWriter, message string) {
 	})
 }
 
-// Handler principal
+// Handler principal - Esta es la función que Vercel llamará
 func Handler(w http.ResponseWriter, r *http.Request) {
 	startTime := time.Now()
 	clientIP := getClientIP(r)

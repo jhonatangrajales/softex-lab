@@ -32,7 +32,6 @@
 - **Variables CSS** para consistencia
 - **Comentarios detallados** en el código
 - **Estructura de archivos** organizada
-- **Tests unitarios** para el backend
 - **Logging estructurado** con niveles
 
 ## 📁 Estructura de Archivos
@@ -49,9 +48,10 @@
 ├── go.mod                   # Dependencias Go
 ├── package.json             # Dependencias Node.js
 ├── api/
-│   ├── contact.go           # Handler principal mejorado
-│   ├── contact_test.go      # Tests unitarios
-│   └── health.go            # Health check endpoint
+│   ├── contact/
+│   │   └── index.go         # Handler de contacto
+│   └── health/
+│       └── index.go         # Health check endpoint
 └── .github/
     └── workflows/
         └── ci-cd.yml        # Pipeline CI/CD
@@ -118,6 +118,7 @@ Respuesta esperada:
 ```bash
 curl -X POST https://tu-dominio.vercel.app/api/contact \
   -H "Content-Type: application/json" \
+  -H "Origin: https://tu-dominio.vercel.app" \
   -d '{
     "name": "Test User",
     "email": "test@example.com", 
@@ -127,18 +128,17 @@ curl -X POST https://tu-dominio.vercel.app/api/contact \
 
 ## 🧪 Testing Local
 
+Para probar localmente, puedes usar:
+
 ```bash
-# Ejecutar tests
-go test ./...
+# Instalar Vercel CLI
+npm i -g vercel
 
-# Tests con coverage
-go test -v -coverprofile=coverage.out ./...
+# Ejecutar localmente
+vercel dev
 
-# Ver coverage en HTML
-go tool cover -html=coverage.out
-
-# Servidor local para desarrollo
-npm run dev
+# O usar un servidor HTTP simple
+npx http-server . -p 3000
 ```
 
 ## 🛡️ Seguridad
@@ -185,9 +185,16 @@ Edita `index.html` para cambiar textos, servicios y información de contacto.
 - Espera 5 minutos antes de intentar nuevamente
 - Para desarrollo, puedes reiniciar la función
 
-### Error de deployment
+### Error de deployment en Vercel
 - Verifica que `vercel.json` tenga formato JSON válido
 - Asegúrate de que `go.mod` esté en la raíz del proyecto
+- Los archivos Go deben estar en `api/nombre/index.go`
+- Cada función debe usar `package handler`
+
+### Error: "Handler redeclared"
+- Cada función serverless debe estar en su propio directorio
+- Estructura correcta: `api/contact/index.go` y `api/health/index.go`
+- Ambos archivos usan `package handler` pero están separados
 
 ## 📞 Soporte
 
@@ -195,6 +202,12 @@ Para soporte técnico o consultas sobre las mejoras implementadas:
 - Email: contacto@softex-labs.xyz
 - Revisa los logs en el dashboard de Vercel
 - Consulta la documentación de Vercel para Go
+
+## 🚀 Endpoints Disponibles
+
+- `GET /api/health` - Health check del servicio
+- `POST /api/contact` - Envío de formulario de contacto
+- `GET /` - Landing page principal
 
 ---
 

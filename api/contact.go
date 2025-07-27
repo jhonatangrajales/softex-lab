@@ -351,63 +351,8 @@ func Contact(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Solicitud recibida - Método: %s, IP: %s", r.Method, clientIP)
 
 	// Configuración de CORS más flexible para manejar www y sin www
-	allowedOrigin := os.Getenv("ALLOWED_ORIGIN")
-	if allowedOrigin == "" {
-		allowedOrigin = "*" // Permitir todos los orígenes por defecto para evitar problemas
-	}
-
-	// Lista de orígenes permitidos
-	allowedOrigins := []string{
-		"https://softex-labs.xyz",
-		"https://www.softex-labs.xyz",
-		"http://localhost:3000",
-		"http://127.0.0.1:3000",
-	}
-
-	// Verificar origen solo para requests que no sean OPTIONS
-	if r.Method != http.MethodOptions {
-		origin := r.Header.Get("Origin")
-		if origin != "" && allowedOrigin != "*" {
-			originAllowed := false
-			if allowedOrigin != "" {
-				// Si hay una variable de entorno específica, usarla
-				originAllowed = (origin == allowedOrigin)
-			} else {
-				// Si no, verificar contra la lista de orígenes permitidos
-				for _, allowed := range allowedOrigins {
-					if origin == allowed {
-						originAllowed = true
-						break
-					}
-				}
-			}
-
-			if !originAllowed {
-				log.Printf("Origen no permitido: %s", origin)
-				sendJSONError(w, "Origen no permitido", http.StatusForbidden)
-				return
-			}
-		}
-	}
-
-	// Configurar headers CORS
-	origin := r.Header.Get("Origin")
-	if origin != "" {
-		// Si el origen está en la lista permitida, usarlo específicamente
-		for _, allowed := range allowedOrigins {
-			if origin == allowed {
-				w.Header().Set("Access-Control-Allow-Origin", origin)
-				break
-			}
-		}
-		// Si no se encontró, usar el allowedOrigin configurado
-		if w.Header().Get("Access-Control-Allow-Origin") == "" {
-			w.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
-		}
-	} else {
-		w.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
-	}
-
+	// Permitir todos los orígenes temporalmente para resolver el problema
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Access-Control-Max-Age", "86400")

@@ -1,12 +1,10 @@
 package api
 
 import (
-	"bytes"
+	"crypto/tls"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"html"
-	"html/template"
 	"log"
 	"net/http"
 	"net/smtp"
@@ -15,16 +13,17 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode"
 )
 
-// ContactData representa los datos del formulario con validaciones mejoradas.
+// ContactData representa los datos del formulario de contacto
 type ContactData struct {
 	Name    string `json:"name"`
 	Email   string `json:"email"`
 	Message string `json:"message"`
 }
 
-// SmtpConfig contiene la configuración para el servidor SMTP.
+// SmtpConfig contiene la configuración SMTP
 type SmtpConfig struct {
 	Host    string
 	Port    string
@@ -33,119 +32,29 @@ type SmtpConfig struct {
 	ToEmail string
 }
 
-// Constantes de validación
-const (
-	MaxNameLength    = 100
-	MaxEmailLength   = 254
-	MaxMessageLength = 2000
-	MinMessageLength = 10
-)
+// APIResponse representa la respuesta de la API
+type APIResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
 
-// emailRegex es una expresión regular más robusta para validar el formato del correo electrónico.
-var emailRegex = regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
-
-// --- Rate Limiter Mejorado ---
-
+// Rate limiting
 type requestInfo struct {
-	count    int
-	lastSeen time.Time
-	blocked  bool
+	count     int
+	firstSeen time.Time
 }
 
 var (
 	visitors = make(map[string]*requestInfo)
-	mu       sync.RWMutex
+	mu       sync.Mutex
 )
 
 const (
-	rateLimit     = 3                // Límite de solicitudes por ventana de tiempo (más restrictivo)
-	timeWindow    = 5 * time.Minute  // Ventana de tiempo más larga
-	blockDuration = 15 * time.Minute // Tiempo de bloqueo por exceder límite
+	maxRequests = 3
+	timeWindow  = 5 * time.Minute
 )
 
-// init se ejecuta una vez cuando el paquete es cargado.
-func init() {
-	// Inicia una goroutine para limpiar visitantes antiguos y prevenir fugas de memoria.
-	go cleanupVisitors()
-}
-
-func cleanupVisitors() {
-	for {
-		time.Sleep(10 * time.Minute) // Frecuencia de limpieza
-		mu.Lock()
-		for ip, v := range visitors {
-			if time.Since(v.lastSeen) > timeWindow*2 {
-				delete(visitors, ip)
-			}
-		}
-		mu.Unlock()
-	}
-}
-
-// checkRateLimit verifica si una IP ha excedido el límite de solicitudes
-func checkRateLimit(clientIP string) error {
-	mu.Lock()
-	defer mu.Unlock()
-
-	now := time.Now()
-	
-	if v, exists := visitors[clientIP]; exists {
-		// Si está bloqueado, verificar si el bloqueo ha expirado
-		if v.blocked && time.Since(v.lastSeen) < blockDuration {
-			return errors.New("IP bloqueada temporalmente por exceder el límite de solicitudes")
-		}
-		
-		// Si ha pasado la ventana de tiempo, resetear contador
-		if time.Since(v.lastSeen) > timeWindow {
-			v.count = 1
-			v.blocked = false
-		} else {
-			v.count++
-		}
-		
-		v.lastSeen = now
-		
-		// Si excede el límite, bloquear
-		if v.count > rateLimit {
-			v.blocked = true
-			return errors.New("has excedido el límite de solicitudes. Intenta de nuevo en 15 minutos")
-		}
-	} else {
-		visitors[clientIP] = &requestInfo{count: 1, lastSeen: now, blocked: false}
-	}
-	
-	return nil
-}
-
-// --- Fin del Rate Limiter ---
-
-func sendJSONError(w http.ResponseWriter, message string, status int) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(status)
-	
-	response := map[string]interface{}{
-		"error":     message,
-		"timestamp": time.Now().UTC().Format(time.RFC3339),
-		"status":    status,
-	}
-	
-	json.NewEncoder(w).Encode(response)
-}
-
-func sendJSONSuccess(w http.ResponseWriter, message string) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	
-	response := map[string]interface{}{
-		"message":   message,
-		"timestamp": time.Now().UTC().Format(time.RFC3339),
-		"status":    http.StatusOK,
-	}
-	
-	json.NewEncoder(w).Encode(response)
-}
-
-// newSmtpConfig crea una configuración SMTP a partir de variables de entorno.
+// Función para obtener la configuración SMTP desde variables de entorno
 func newSmtpConfig() (SmtpConfig, error) {
 	config := SmtpConfig{
 		Host:    os.Getenv("SMTP_HOST"),
@@ -156,30 +65,17 @@ func newSmtpConfig() (SmtpConfig, error) {
 	}
 
 	if config.Host == "" || config.Port == "" || config.User == "" || config.Pass == "" {
-		log.Println("Error: Configuración SMTP incompleta en las variables de entorno de Vercel.")
-		return SmtpConfig{}, errors.New("error de configuración del servidor para enviar el correo. Contacte al administrador")
+		return config, fmt.Errorf("faltan variables de entorno SMTP requeridas")
 	}
 
 	if config.ToEmail == "" {
-		config.ToEmail = "contacto@softex-labs.xyz" // Fallback si no se configura TO_EMAIL
-		log.Println("Advertencia: TO_EMAIL no configurado. Usando el valor por defecto:", config.ToEmail)
+		config.ToEmail = "contacto@softex-labs.xyz"
 	}
 
 	return config, nil
 }
 
-// sanitizeInput limpia y sanitiza la entrada del usuario
-func sanitizeInput(input string) string {
-	// Escapar HTML para prevenir XSS
-	sanitized := html.EscapeString(input)
-	// Remover espacios en blanco excesivos
-	sanitized = strings.TrimSpace(sanitized)
-	// Remover caracteres de control
-	sanitized = regexp.MustCompile(`[\x00-\x1f\x7f]`).ReplaceAllString(sanitized, "")
-	return sanitized
-}
-
-// validateContactData valida los datos del formulario con reglas más estrictas
+// Función para validar los datos del formulario
 func validateContactData(data *ContactData) error {
 	// Sanitizar datos
 	data.Name = sanitizeInput(data.Name)
@@ -187,185 +83,281 @@ func validateContactData(data *ContactData) error {
 	data.Message = sanitizeInput(data.Message)
 
 	// Validar nombre
-	if data.Name == "" {
-		return errors.New("el nombre es obligatorio")
+	if strings.TrimSpace(data.Name) == "" {
+		return fmt.Errorf("el nombre es obligatorio")
 	}
-	if len(data.Name) > MaxNameLength {
-		return fmt.Errorf("el nombre no puede exceder %d caracteres", MaxNameLength)
+	if len(data.Name) > 100 {
+		return fmt.Errorf("el nombre no puede exceder 100 caracteres")
 	}
-	if matched, _ := regexp.MatchString(`^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$`, data.Name); !matched {
-		return errors.New("el nombre solo puede contener letras y espacios")
+	// Validar que el nombre solo contenga letras y espacios
+	nameRegex := regexp.MustCompile(`^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$`)
+	if !nameRegex.MatchString(data.Name) {
+		return fmt.Errorf("el nombre solo puede contener letras y espacios")
 	}
 
 	// Validar email
-	if data.Email == "" {
-		return errors.New("el correo electrónico es obligatorio")
+	if strings.TrimSpace(data.Email) == "" {
+		return fmt.Errorf("el correo electrónico es obligatorio")
 	}
-	if len(data.Email) > MaxEmailLength {
-		return fmt.Errorf("el correo electrónico no puede exceder %d caracteres", MaxEmailLength)
-	}
+	emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
 	if !emailRegex.MatchString(data.Email) {
-		return errors.New("el formato del correo electrónico no es válido")
+		return fmt.Errorf("el formato del correo electrónico no es válido")
 	}
 
 	// Validar mensaje
-	if data.Message == "" {
-		return errors.New("el mensaje es obligatorio")
+	if strings.TrimSpace(data.Message) == "" {
+		return fmt.Errorf("el mensaje es obligatorio")
 	}
-	if len(data.Message) < MinMessageLength {
-		return fmt.Errorf("el mensaje debe tener al menos %d caracteres", MinMessageLength)
+	if len(data.Message) < 10 {
+		return fmt.Errorf("el mensaje debe tener al menos 10 caracteres")
 	}
-	if len(data.Message) > MaxMessageLength {
-		return fmt.Errorf("el mensaje no puede exceder %d caracteres", MaxMessageLength)
+	if len(data.Message) > 1000 {
+		return fmt.Errorf("el mensaje no puede exceder 1000 caracteres")
 	}
 
 	return nil
 }
 
-// emailTemplate es una plantilla HTML parseada para el correo.
-var emailTemplate = template.Must(template.New("contactEmail").Parse(`<!DOCTYPE html>
-<html lang="es" style="font-family: 'Montserrat', sans-serif; margin: 0; padding: 0;">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuevo Mensaje de Contacto - Softex Labs</title>
-</head>
-<body style="background-color: #f4f4f4; color: #333; padding: 20px;">
-    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-            <td align="center">
-                <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 30px;">
-                    <!-- Header -->
-                    <tr>
-                        <td align="center" style="padding-bottom: 20px; border-bottom: 1px solid #eee;">
-                            <h1 style="color: #4f46e5; margin: 10px 0 0 0;">Nuevo Mensaje de Contacto</h1>
-                            <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">Recibido el {{.Timestamp}}</p>
-                        </td>
-                    </tr>
-                    <!-- Body -->
-                    <tr>
-                        <td style="padding: 20px 0;">
-                            <p>Has recibido un nuevo mensaje desde tu sitio web:</p>
-                            <table width="100%" style="margin: 20px 0;">
-                                <tr>
-                                    <td style="padding: 10px; background-color: #f8f9fa; border-left: 4px solid #4f46e5;">
-                                        <p style="margin: 0 0 10px 0;"><strong>Nombre:</strong> {{.Name}}</p>
-                                        <p style="margin: 0 0 10px 0;"><strong>Email:</strong> {{.Email}}</p>
-                                        <p style="margin: 0;"><strong>IP:</strong> {{.ClientIP}}</p>
-                                    </td>
-                                </tr>
-                            </table>
-                            <p><strong>Mensaje:</strong></p>
-                            <div style="background-color: #f9f9f9; border-left: 4px solid #4f46e5; padding: 15px; margin: 10px 0; white-space: pre-wrap;">{{.Message}}</div>
-                        </td>
-                    </tr>
-                    <!-- Footer -->
-                    <tr>
-                        <td align="center" style="padding-top: 20px; border-top: 1px solid #eee; font-size: 0.8em; color: #777;">
-                            <p>&copy; {{.Year}} Softex Labs. Todos los derechos reservados.</p>
-                            <p style="margin: 5px 0 0 0;">Este mensaje fue enviado desde softex-labs.xyz</p>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-</body>
-</html>`))
+// Función para sanitizar entrada
+func sanitizeInput(input string) string {
+	// Remover caracteres de control
+	cleaned := strings.Map(func(r rune) rune {
+		if unicode.IsControl(r) && r != '\n' && r != '\r' && r != '\t' {
+			return -1
+		}
+		return r
+	}, input)
 
-func formatEmailBody(data ContactData, clientIP string) (string, error) {
-	var body bytes.Buffer
-	templateData := struct {
-		ContactData
-		Year      int
-		Timestamp string
-		ClientIP  string
-	}{
-		ContactData: data,
-		Year:        time.Now().Year(),
-		Timestamp:   time.Now().Format("2006-01-02 15:04:05 UTC"),
-		ClientIP:    clientIP,
-	}
+	// Escapar HTML
+	cleaned = html.EscapeString(cleaned)
 
-	if err := emailTemplate.Execute(&body, templateData); err != nil {
-		return "", fmt.Errorf("error al generar el cuerpo del correo: %v", err)
-	}
-
-	return body.String(), nil
+	// Trim espacios
+	return strings.TrimSpace(cleaned)
 }
 
-func sendEmail(config SmtpConfig, data ContactData, clientIP string) error {
-	body, err := formatEmailBody(data, clientIP)
-	if err != nil {
-		return err
+// Función para verificar rate limiting
+func checkRateLimit(clientIP string) error {
+	mu.Lock()
+	defer mu.Unlock()
+
+	now := time.Now()
+
+	// Limpiar entradas antiguas
+	for ip, info := range visitors {
+		if now.Sub(info.firstSeen) > timeWindow {
+			delete(visitors, ip)
+		}
 	}
 
-	subject := fmt.Sprintf("Nuevo mensaje de contacto de %s - Softex Labs", data.Name)
-	
+	// Verificar límite para esta IP
+	if info, exists := visitors[clientIP]; exists {
+		if info.count >= maxRequests {
+			return fmt.Errorf("demasiadas solicitudes. Intenta de nuevo en %v", timeWindow-now.Sub(info.firstSeen))
+		}
+		info.count++
+	} else {
+		visitors[clientIP] = &requestInfo{
+			count:     1,
+			firstSeen: now,
+		}
+	}
+
+	return nil
+}
+
+// Función para obtener la IP del cliente
+func getClientIP(r *http.Request) string {
+	// Verificar headers de proxy
+	if ip := r.Header.Get("CF-Connecting-IP"); ip != "" {
+		return ip
+	}
+	if ip := r.Header.Get("X-Forwarded-For"); ip != "" {
+		return strings.Split(ip, ",")[0]
+	}
+	if ip := r.Header.Get("X-Real-IP"); ip != "" {
+		return ip
+	}
+
+	// Fallback a RemoteAddr
+	ip := r.RemoteAddr
+	if colon := strings.LastIndex(ip, ":"); colon != -1 {
+		ip = ip[:colon]
+	}
+	return ip
+}
+
+// Función para formatear el cuerpo del email
+func formatEmailBody(data ContactData, clientIP string) (string, error) {
+	template := `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Nuevo mensaje de contacto - Softex Labs</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+    <div style="max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+        <h2 style="color: #4f46e5; border-bottom: 2px solid #4f46e5; padding-bottom: 10px;">
+            📧 Nuevo Mensaje de Contacto
+        </h2>
+        
+        <div style="margin: 20px 0;">
+            <h3 style="color: #333; margin-bottom: 15px;">Información del Contacto:</h3>
+            <table style="width: 100%%; border-collapse: collapse;">
+                <tr>
+                    <td style="padding: 8px; background: #f9f9f9; border: 1px solid #ddd; font-weight: bold; width: 30%%;">Nombre:</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">%s</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; background: #f9f9f9; border: 1px solid #ddd; font-weight: bold;">Email:</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">%s</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; background: #f9f9f9; border: 1px solid #ddd; font-weight: bold;">IP:</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">%s</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; background: #f9f9f9; border: 1px solid #ddd; font-weight: bold;">Fecha:</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">%s</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div style="margin: 20px 0;">
+            <h3 style="color: #333; margin-bottom: 15px;">Mensaje:</h3>
+            <div style="background: #f9f9f9; padding: 15px; border-left: 4px solid #4f46e5; border-radius: 4px;">
+                %s
+            </div>
+        </div>
+        
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; color: #666; font-size: 12px;">
+            <p>Este mensaje fue enviado desde el formulario de contacto de Softex Labs.</p>
+            <p>Responde directamente a este email para contactar al usuario.</p>
+        </div>
+    </div>
+</body>
+</html>`
+
+	return fmt.Sprintf(template,
+		data.Name,
+		data.Email,
+		clientIP,
+		time.Now().Format("2006-01-02 15:04:05"),
+		strings.ReplaceAll(data.Message, "\n", "<br>")), nil
+}
+
+// Función para enviar email
+func sendEmail(config SmtpConfig, data ContactData, clientIP string) error {
+	subject := fmt.Sprintf("Nuevo mensaje de contacto de %s", data.Name)
+
+	body, err := formatEmailBody(data, clientIP)
+	if err != nil {
+		return fmt.Errorf("error al formatear el cuerpo del email: %v", err)
+	}
+
 	msg := fmt.Sprintf("From: %s\r\nTo: %s\r\nSubject: %s\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n%s",
 		config.User, config.ToEmail, subject, body)
 
 	auth := smtp.PlainAuth("", config.User, config.Pass, config.Host)
 	addr := fmt.Sprintf("%s:%s", config.Host, config.Port)
 
-	err = smtp.SendMail(addr, auth, config.User, []string{config.ToEmail}, []byte(msg))
+	// Configurar TLS
+	tlsConfig := &tls.Config{
+		InsecureSkipVerify: false,
+		ServerName:         config.Host,
+	}
+
+	conn, err := tls.Dial("tcp", addr, tlsConfig)
 	if err != nil {
-		log.Printf("Error al enviar correo: %v", err)
-		return errors.New("no se pudo enviar el correo. Por favor, inténtalo de nuevo más tarde")
+		return fmt.Errorf("error al conectar con TLS: %v", err)
+	}
+	defer conn.Close()
+
+	client, err := smtp.NewClient(conn, config.Host)
+	if err != nil {
+		return fmt.Errorf("error al crear cliente SMTP: %v", err)
+	}
+	defer client.Quit()
+
+	if err = client.Auth(auth); err != nil {
+		return fmt.Errorf("error de autenticación SMTP: %v", err)
+	}
+
+	if err = client.Mail(config.User); err != nil {
+		return fmt.Errorf("error al establecer remitente: %v", err)
+	}
+
+	if err = client.Rcpt(config.ToEmail); err != nil {
+		return fmt.Errorf("error al establecer destinatario: %v", err)
+	}
+
+	writer, err := client.Data()
+	if err != nil {
+		return fmt.Errorf("error al iniciar datos: %v", err)
+	}
+
+	_, err = writer.Write([]byte(msg))
+	if err != nil {
+		return fmt.Errorf("error al escribir mensaje: %v", err)
+	}
+
+	err = writer.Close()
+	if err != nil {
+		return fmt.Errorf("error al cerrar escritor: %v", err)
 	}
 
 	return nil
 }
 
+// Función para parsear y validar la request
 func parseAndValidateRequest(r *http.Request) (ContactData, error) {
 	var data ContactData
 
 	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
-		return ContactData{}, errors.New("error al decodificar la solicitud JSON. Asegúrese de que el formato sea correcto")
+		return data, fmt.Errorf("error al decodificar JSON: %v", err)
 	}
 
 	if err := validateContactData(&data); err != nil {
-		return ContactData{}, err
+		return data, err
 	}
 
 	return data, nil
 }
 
-func getClientIP(r *http.Request) string {
-	// Verificar headers de proxy en orden de prioridad
-	headers := []string{
-		"CF-Connecting-IP",    // Cloudflare
-		"X-Forwarded-For",     // Estándar
-		"X-Real-IP",           // Nginx
-		"X-Client-IP",         // Apache
-	}
-	
-	for _, header := range headers {
-		ip := r.Header.Get(header)
-		if ip != "" {
-			// Tomar solo la primera IP si hay múltiples
-			return strings.Split(strings.TrimSpace(ip), ",")[0]
-		}
-	}
-	
-	// Fallback para desarrollo local
-	return strings.Split(r.RemoteAddr, ":")[0]
+// Función para enviar respuesta JSON de error
+func sendJSONError(w http.ResponseWriter, message string, statusCode int) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(statusCode)
+	json.NewEncoder(w).Encode(APIResponse{
+		Success: false,
+		Message: message,
+	})
 }
 
-// Handler función que Vercel ejecutará.
+// Función para enviar respuesta JSON de éxito
+func sendJSONSuccess(w http.ResponseWriter, message string) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(APIResponse{
+		Success: true,
+		Message: message,
+	})
+}
+
+// Handler principal
 func Handler(w http.ResponseWriter, r *http.Request) {
 	startTime := time.Now()
 	clientIP := getClientIP(r)
-	
+
 	log.Printf("Solicitud recibida - Método: %s, IP: %s", r.Method, clientIP)
 
 	// Configuración de CORS más segura
 	allowedOrigin := os.Getenv("ALLOWED_ORIGIN")
 	if allowedOrigin == "" {
-		allowedOrigin = "https://softex-labs.xyz" // Dominio específico en producción
+		allowedOrigin = "https://softex-labs.xyz"
 	}
-	
-	// Verificar origen para requests que no sean OPTIONS
+
+	// Verificar origen solo para requests que no sean OPTIONS
 	if r.Method != http.MethodOptions {
 		origin := r.Header.Get("Origin")
 		if origin != "" && origin != allowedOrigin && allowedOrigin != "*" {
@@ -373,18 +365,18 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	
+
 	w.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
 	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-	w.Header().Set("Access-Control-Max-Age", "86400") // Cache preflight por 24 horas
+	w.Header().Set("Access-Control-Max-Age", "86400")
 
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusOK)
 		return
 	}
 
-	// Aplicar el límite de tasa mejorado
+	// Rate limiting
 	if err := checkRateLimit(clientIP); err != nil {
 		log.Printf("Rate limit excedido para IP %s: %v", clientIP, err)
 		sendJSONError(w, err.Error(), http.StatusTooManyRequests)
@@ -396,7 +388,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 1. Parsear y validar la solicitud
+	// Parsear y validar
 	data, err := parseAndValidateRequest(r)
 	if err != nil {
 		log.Printf("Error de validación para IP %s: %v", clientIP, err)
@@ -404,7 +396,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 2. Cargar la configuración
+	// Configuración SMTP
 	config, err := newSmtpConfig()
 	if err != nil {
 		log.Printf("Error de configuración SMTP: %v", err)
@@ -412,7 +404,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 3. Enviar el correo
+	// Enviar email
 	err = sendEmail(config, data, clientIP)
 	if err != nil {
 		log.Printf("Error al enviar correo para IP %s: %v", clientIP, err)
@@ -422,6 +414,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	duration := time.Since(startTime)
 	log.Printf("Correo enviado exitosamente - IP: %s, Duración: %v", clientIP, duration)
-	
+
 	sendJSONSuccess(w, "¡Mensaje enviado con éxito! Te responderemos pronto.")
 }

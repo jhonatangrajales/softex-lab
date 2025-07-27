@@ -3,7 +3,7 @@
 ## 🚀 Mejoras Implementadas
 
 ### ✅ Seguridad y Validación
-- **Rate limiting mejorado** con bloqueo temporal por IP
+- **Rate limiting mejorado** con bloqueo temporal por IP (3 requests/5min)
 - **Validación robusta** con límites de caracteres y sanitización
 - **CORS configurado** de forma segura
 - **Sanitización de entrada** para prevenir XSS
@@ -22,10 +22,10 @@
 ### ✅ Performance y Optimización
 - **CSS separado** del HTML para mejor mantenimiento
 - **Service Worker** para cache offline
+- **PWA capabilities** con manifest
 - **Lazy loading** para imágenes
 - **Preload de recursos** críticos
 - **Animaciones optimizadas** con CSS
-- **Responsive design** mejorado
 
 ### ✅ Mantenibilidad del Código
 - **Código modular** con funciones separadas
@@ -34,21 +34,6 @@
 - **Estructura de archivos** organizada
 - **Tests unitarios** para el backend
 - **Logging estructurado** con niveles
-
-### ✅ Funcionalidades Adicionales
-- **Sistema de analytics** para métricas del formulario
-- **Notificaciones Slack** para nuevos mensajes
-- **Auto-respuesta** automática a usuarios
-- **PWA capabilities** con manifest
-- **Health checks** para monitoreo
-- **CI/CD pipeline** con GitHub Actions
-
-### ✅ Testing y Calidad
-- **Tests unitarios** completos para el backend
-- **Validación de entrada** exhaustiva
-- **Rate limiting** probado
-- **Sanitización** de datos testada
-- **Pipeline CI/CD** automatizado
 
 ## 📁 Estructura de Archivos
 
@@ -59,14 +44,14 @@
 ├── app.js                   # JavaScript mejorado
 ├── sw.js                    # Service Worker para PWA
 ├── site.webmanifest         # Manifest para PWA
+├── vercel.json              # Configuración de Vercel
+├── .vercelignore            # Archivos a ignorar en deployment
 ├── go.mod                   # Dependencias Go
-├── go.sum                   # Checksums de dependencias
 ├── package.json             # Dependencias Node.js
 ├── api/
 │   ├── contact.go           # Handler principal mejorado
 │   ├── contact_test.go      # Tests unitarios
-│   ├── analytics.go         # Sistema de analytics
-│   └── notifications.go     # Sistema de notificaciones
+│   └── health.go            # Health check endpoint
 └── .github/
     └── workflows/
         └── ci-cd.yml        # Pipeline CI/CD
@@ -74,45 +59,73 @@
 
 ## 🔧 Variables de Entorno
 
-### Obligatorias
+### Obligatorias para Vercel
 ```bash
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=tu-email@gmail.com
 SMTP_PASS=tu-app-password
 TO_EMAIL=contacto@softex-labs.xyz
-ALLOWED_ORIGIN=https://softex-labs.xyz
+ALLOWED_ORIGIN=https://tu-dominio.vercel.app
 ```
 
-### Opcionales
+## 🚀 Despliegue en Vercel
+
+### Paso 1: Preparar el Repositorio
+1. Asegúrate de que todos los archivos estén en tu repositorio Git
+2. Haz commit y push de todos los cambios
+
+### Paso 2: Conectar a Vercel
+1. Ve a [vercel.com](https://vercel.com) e inicia sesión
+2. Haz clic en "New Project"
+3. Importa tu repositorio desde GitHub/GitLab/Bitbucket
+
+### Paso 3: Configurar Variables de Entorno
+En el dashboard de Vercel, ve a `Settings` > `Environment Variables` y añade:
+
+| Variable | Valor | Descripción |
+|----------|-------|-------------|
+| `SMTP_HOST` | `smtp.gmail.com` | Servidor SMTP |
+| `SMTP_PORT` | `587` | Puerto SMTP |
+| `SMTP_USER` | `tu-email@gmail.com` | Tu email |
+| `SMTP_PASS` | `tu-app-password` | Contraseña de aplicación |
+| `TO_EMAIL` | `contacto@softex-labs.xyz` | Email destino |
+| `ALLOWED_ORIGIN` | `https://tu-dominio.vercel.app` | Dominio permitido |
+
+### Paso 4: Deploy
+1. Haz clic en "Deploy"
+2. Vercel detectará automáticamente la configuración Go
+3. El deployment debería completarse sin errores
+
+## 🔍 Verificar el Deployment
+
+### Health Check
 ```bash
-# Notificaciones Slack
-SLACK_WEBHOOK_URL=https://hooks.slack.com/services/...
-
-# Auto-respuesta
-AUTO_RESPONSE_ENABLED=true
-
-# Analytics
-ADMIN_KEY=tu-clave-secreta-admin
-
-# Versión de la app
-APP_VERSION=1.0.0
+curl https://tu-dominio.vercel.app/api/health
 ```
 
-## 🚀 Despliegue
+Respuesta esperada:
+```json
+{
+  "status": "healthy",
+  "timestamp": "2024-01-01T12:00:00Z",
+  "version": "2.0.0",
+  "service": "softex-labs-contact-api"
+}
+```
 
-### Vercel (Recomendado)
-1. Conecta tu repositorio a Vercel
-2. Configura las variables de entorno en el dashboard
-3. El despliegue es automático con cada push
+### Test del Formulario
+```bash
+curl -X POST https://tu-dominio.vercel.app/api/contact \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Test User",
+    "email": "test@example.com", 
+    "message": "Este es un mensaje de prueba"
+  }'
+```
 
-### Variables de Entorno en Vercel
-Ve a `Settings` > `Environment Variables` y añade:
-- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`
-- `TO_EMAIL`, `ALLOWED_ORIGIN`
-- Opcionalmente: `SLACK_WEBHOOK_URL`, `AUTO_RESPONSE_ENABLED`, `ADMIN_KEY`
-
-## 🧪 Testing
+## 🧪 Testing Local
 
 ```bash
 # Ejecutar tests
@@ -123,32 +136,18 @@ go test -v -coverprofile=coverage.out ./...
 
 # Ver coverage en HTML
 go tool cover -html=coverage.out
+
+# Servidor local para desarrollo
+npm run dev
 ```
-
-## 📊 Analytics
-
-Accede a las métricas del formulario:
-```bash
-curl -H "X-Admin-Key: tu-clave-admin" https://tu-dominio.com/api/analytics
-```
-
-## 🔔 Notificaciones
-
-### Slack
-1. Crea un webhook en tu workspace de Slack
-2. Configura `SLACK_WEBHOOK_URL` en las variables de entorno
-3. Los mensajes aparecerán automáticamente en el canal configurado
-
-### Auto-respuesta
-1. Configura `AUTO_RESPONSE_ENABLED=true`
-2. Los usuarios recibirán una confirmación automática
 
 ## 🛡️ Seguridad
 
 - **Rate limiting**: 3 requests por 5 minutos por IP
 - **Validación de entrada**: Sanitización automática
 - **CORS**: Configurado para dominios específicos
-- **Headers de seguridad**: Implementados automáticamente
+- **TLS**: Conexión segura para SMTP
+- **Headers de seguridad**: Implementados automáticamente por Vercel
 
 ## 📱 PWA Features
 
@@ -156,18 +155,6 @@ curl -H "X-Admin-Key: tu-clave-admin" https://tu-dominio.com/api/analytics
 - **Installable** en dispositivos móviles
 - **Cache inteligente** de recursos estáticos
 - **Manifest** configurado para app-like experience
-
-## 🔍 Monitoreo
-
-### Health Check
-```bash
-curl https://tu-dominio.com/health
-```
-
-### Métricas
-```bash
-curl https://tu-dominio.com/metrics
-```
 
 ## 🎨 Personalización
 
@@ -184,18 +171,30 @@ Modifica las variables CSS en `styles.css`:
 ### Contenido
 Edita `index.html` para cambiar textos, servicios y información de contacto.
 
-## 🚀 Próximas Mejoras
+## 🔧 Troubleshooting
 
-- [ ] Dashboard administrativo
-- [ ] Integración con CRM
-- [ ] Múltiples idiomas (i18n)
-- [ ] Chat en vivo
-- [ ] A/B testing
-- [ ] Métricas avanzadas con Google Analytics 4
+### Error: "Origen no permitido"
+- Verifica que `ALLOWED_ORIGIN` coincida exactamente con tu dominio
+- Para desarrollo local, usa `ALLOWED_ORIGIN=*`
+
+### Error: "Faltan variables de entorno SMTP"
+- Asegúrate de configurar todas las variables SMTP en Vercel
+- Verifica que no haya espacios extra en los valores
+
+### Error: "Rate limit excedido"
+- Espera 5 minutos antes de intentar nuevamente
+- Para desarrollo, puedes reiniciar la función
+
+### Error de deployment
+- Verifica que `vercel.json` tenga formato JSON válido
+- Asegúrate de que `go.mod` esté en la raíz del proyecto
 
 ## 📞 Soporte
 
-Para soporte técnico o consultas sobre las mejoras implementadas, contacta al equipo de desarrollo.
+Para soporte técnico o consultas sobre las mejoras implementadas:
+- Email: contacto@softex-labs.xyz
+- Revisa los logs en el dashboard de Vercel
+- Consulta la documentación de Vercel para Go
 
 ---
 

@@ -1,0 +1,16 @@
+# Archivos de desarrollo
+node_modules/
+.git/
+.github/
+*.log
+.env*
+
+# Archivos de test
+*_test.go
+coverage.out
+
+# Archivos temporales
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db

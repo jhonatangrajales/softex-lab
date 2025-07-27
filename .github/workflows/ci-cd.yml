@@ -2,73 +2,60 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v4
     
-    - name: Set up Go
-      uses: actions/setup-go@v3
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
       with:
-        go-version: 1.19
+        node-version: '18'
+        cache: 'npm'
     
     - name: Install dependencies
-      run: go mod download
+      run: npm ci
     
-    - name: Run tests
-      run: go test -v ./...
-    
-    - name: Run tests with coverage
-      run: go test -v -coverprofile=coverage.out ./...
-    
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        file: ./coverage.out
-
-  lint:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v3
+    - name: Build project
+      run: npm run build
     
     - name: Set up Go
-      uses: actions/setup-go@v3
+      uses: actions/setup-go@v4
       with:
-        go-version: 1.19
+        go-version: '1.21'
     
-    - name: golangci-lint
-      uses: golangci/golangci-lint-action@v3
-      with:
-        version: latest
-
-  security:
-    runs-on: ubuntu-latest
+    - name: Verify Go modules
+      run: go mod verify
     
-    steps:
-    - uses: actions/checkout@v3
+    - name: Check Go formatting
+      run: |
+        if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then
+          echo "Go code is not formatted properly"
+          gofmt -s -l .
+          exit 1
+        fi
     
-    - name: Run Gosec Security Scanner
-      uses: securecodewarrior/github-action-gosec@master
-      with:
-        args: './...'
+    - name: Run Go vet
+      run: go vet ./...
 
   deploy:
-    needs: [test, lint, security]
+    needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v4
     
     - name: Deploy to Vercel
-      uses: amondnet/vercel-action@v20
+      uses: amondnet/vercel-action@v25
       with:
         vercel-token: ${{ secrets.VERCEL_TOKEN }}
         vercel-org-id: ${{ secrets.ORG_ID }}

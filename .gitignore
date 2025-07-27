@@ -1,18 +1,41 @@
-# Archivos de entorno - ¡No subir a Git!
-.env
+# Vercel
+.vercel
 
-# Binarios y ejecutables
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
+# Local env files
+.env*.local
 
-# Binarios de test
-*.test
+# Dependencies
+node_modules/
 
-# Archivos de cobertura
-*.out
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Ejecutable de la aplicación
-/main
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp

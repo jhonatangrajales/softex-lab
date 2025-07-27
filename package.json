@@ -4,11 +4,14 @@
   "description": "Landing page mejorada para Softex Labs con funcionalidades avanzadas",
   "main": "app.js",
   "scripts": {
-    "dev": "npx http-server public -p 3000",
-    "build": "mkdir -p public && cp index.html styles.css app.js sw.js site.webmanifest public/",
-    "test": "echo 'Frontend tests would go here'",
-    "lint": "echo 'Linting would go here'",
-    "deploy": "vercel --prod"
+    "dev": "npx http-server public -p 3000 -o",
+    "build": "rm -rf public && mkdir -p public && cp index.html styles.css app.js sw.js site.webmanifest public/ && echo 'Build completed successfully'",
+    "prebuild": "echo 'Starting build process...'",
+    "postbuild": "echo 'Build process finished. Files in public:' && ls -la public/",
+    "test": "echo 'No tests specified'",
+    "lint": "echo 'No linting configured'",
+    "deploy": "vercel --prod",
+    "clean": "rm -rf public"
   },
   "keywords": [
     "landing-page",
@@ -26,7 +29,7 @@
     "http-server": "^14.1.1"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "repository": {
     "type": "git",

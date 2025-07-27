@@ -1,467 +1,675 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+<html lang="es">
 <head>
+    <!-- Meta tags mejorados -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Softex Labs - Soluciones tecnológicas innovadoras para PYMES. Desarrollo de software, automatización y portales digitales.">
+    <meta name="keywords" content="desarrollo software, automatización, PYMES, portales digitales, aplicaciones móviles, Softex Labs">
+    <meta name="author" content="Softex Labs">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#4f46e5">
     
-    <!-- Título SEO optimizado para PyMES -->
-    <title>Software a Medida para PyMES | Softex Labs</title>
-
-    <!-- Meta Descripción SEO optimizada para PyMES -->
-    <meta name="description" content="Potenciamos tu PyME con software a medida. Soluciones de gestión, CRM, facturación y automatización para optimizar operaciones y acelerar tu crecimiento.">
-    <meta name="keywords" content="software para pymes, desarrollo a medida, crm para pymes, erp para pymes, automatización de procesos, softex labs, colombia">
-
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://www.softex-labs.xyz/"> <!-- Asegúrate que este sea tu dominio final -->
-
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph mejorado -->
+    <meta property="og:title" content="Softex Labs - Soluciones Tecnológicas para PYMES">
+    <meta property="og:description" content="Transformamos tu negocio con soluciones tecnológicas innovadoras. Desarrollo de software, automatización y portales digitales.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.softex-labs.xyz/">
-    <meta property="og:title" content="Softex Labs | Soluciones de Software para PyMES">
-    <meta property="og:description" content="Digitalizamos y optimizamos tu empresa con software de gestión, CRM y automatización diseñado para las necesidades de las PyMES.">
-    <meta property="og:image" content="https://www.softex-labs.xyz/images/og-image-pymes.png"> <!-- Debes crear y subir esta imagen -->
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://www.softex-labs.xyz/">
-    <meta property="twitter:title" content="Softex Labs | Software a Medida para PyMES">
-    <meta property="twitter:description" content="Digitalizamos y optimizamos tu empresa con software de gestión, CRM y automatización diseñado para las necesidades de las PyMES.">
-    <meta property="twitter:image" content="https://www.softex-labs.xyz/images/og-image-pymes.png"> <!-- Usa la misma imagen que Open Graph -->
+    <meta property="og:url" content="https://softex-labs.xyz">
+    <meta property="og:image" content="https://softex-labs.xyz/og-image.jpg">
+    <meta property="og:locale" content="es_ES">
     
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Softex Labs - Soluciones Tecnológicas">
+    <meta name="twitter:description" content="Transformamos tu negocio con tecnología innovadora">
+    <meta name="twitter:image" content="https://softex-labs.xyz/twitter-image.jpg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://softex-labs.xyz">
+    
+    <!-- Favicon mejorado -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    
+    <title>Softex Labs - Soluciones Tecnológicas Innovadoras para PYMES</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="/styles.css" as="style">
+    <link rel="preload" href="/app.js" as="script">
+    
+    <!-- Styles -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/styles.css">
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
-
-    <script src="app.js" defer></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-    <style>
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #0c0a18;
+    <!-- Tailwind config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'montserrat': ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#4f46e5',
+                        secondary: '#06b6d4',
+                        accent: '#f59e0b',
+                    }
+                }
+            }
         }
-
-        .gradient-text {
-            background: linear-gradient(90deg, #4f46e5, #a855f7, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .reveal-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-
-        .is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
-
-    <!-- Datos Estructurados (JSON-LD) -->
+    </script>
+    
+    <!-- JSON-LD Structured Data mejorado -->
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": "Softex Labs",
-      "description": "Desarrollo de software a medida especializado en soluciones para Pequeñas y Medianas Empresas (PyMES) en Colombia.",
-      "image": "https://www.softex-labs.xyz/images/logo.png",
-      "url": "https://www.softex-labs.xyz/",
-      "makesOffer": [
-        {
-          "@type": "Offer",
-          "itemOffered": { "@type": "Service", "name": "Software de Gestión para PyMES" }
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Softex Labs",
+        "description": "Soluciones tecnológicas innovadoras para PYMES",
+        "url": "https://softex-labs.xyz",
+        "logo": "https://softex-labs.xyz/logo.png",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+1-234-567-8900",
+            "contactType": "customer service",
+            "availableLanguage": ["Spanish", "English"]
         },
-        {
-          "@type": "Offer",
-          "itemOffered": { "@type": "Service", "name": "Desarrollo de CRM para PyMES" }
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "ES"
         },
-        {
-          "@type": "Offer",
-          "itemOffered": { "@type": "Service", "name": "Automatización de Procesos para PyMES" }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": { "@type": "Service", "name": "Desarrollo de Aplicaciones Móviles para Empresas" }
-        }
-      ],
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "telephone": "+57-317-8334370",
-        "contactType": "customer service",
-        "areaServed": "CO",
-        "availableLanguage": ["es"]
-      },
-      "sameAs": [
-        "https://wa.me/573178334370"
-      ]
+        "sameAs": [
+            "https://linkedin.com/company/softex-labs",
+            "https://twitter.com/softexlabs"
+        ],
+        "foundingDate": "2024",
+        "numberOfEmployees": "10-50",
+        "industry": "Software Development"
     }
     </script>
 </head>
-<body class="text-gray-200" x-data="{ mobileMenuOpen: false }">
 
-    <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" x-data="{ scrolled: false }" @scroll.window="scrolled = (window.scrollY > 50)">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center" :class="{ 'bg-slate-900/80 backdrop-blur-sm shadow-lg rounded-xl mt-2': scrolled }">
-            <!-- Logo -->
-            <a href="#" class="flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 focus:ring-offset-slate-900 rounded-sm">
-                <svg class="h-10 w-10 text-violet-400" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="logoTitle logoDesc">
-                    <title id="logoTitle">Logo de Softex Labs</title>
-                    <desc id="logoDesc">Dos formas de C entrelazadas que forman el logo.</desc>
-                    <path d="M73.45,25C86.7,25 95,35.82 95,49.5C95,63.18 86.7,75 73.45,75C60.2,75 50.11,63.18 50.11,49.5C50.11,40.12 55.43,30.2 65,26.5" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M26.55,75C13.3,75 5,64.18 5,50.5C5,36.82 13.3,25 26.55,25C39.8,25 49.89,36.82 49.89,50.5C49.89,59.88 44.57,69.8 35,73.5" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span class="text-2xl font-black tracking-widest text-white">SOFTEX LABS</span>
-            </a>
-            
-            <!-- Desktop Menu -->
-            <div class="hidden md:flex items-center space-x-8" aria-label="Menú principal">
-                <a href="#mision" class="hover:text-violet-400 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-400 rounded-sm">Nosotros</a>
-                <a href="#valores" class="hover:text-violet-400 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-400 rounded-sm">Valores</a>
-                <a href="#services" class="hover:text-violet-400 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-400 rounded-sm">Servicios</a>
-                <a href="#contacto" class="bg-violet-600 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded-lg transition-transform duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-violet-400">Contacto</a>
-            </div>
+<body class="font-montserrat text-gray-200 bg-gradient-to-br from-slate-900 to-slate-800 min-h-screen" x-data="navigation()">
+    <!-- Skip to main content para accesibilidad -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-white px-4 py-2 rounded-md z-50">
+        Saltar al contenido principal
+    </a>
 
-            <!-- Mobile Menu boton -->
-            <div class="md:hidden">
-                <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-white focus:outline-none" aria-label="Abrir menú de navegación" :aria-expanded="mobileMenuOpen" aria-controls="mobile-menu">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+    <!-- Header mejorado -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-slate-900/80 backdrop-blur-md border-b border-white/10" role="banner">
+        <nav class="container mx-auto px-6 py-4" role="navigation" aria-label="Navegación principal">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm" aria-hidden="true">SL</span>
+                    </div>
+                    <span class="text-xl font-bold gradient-text">Softex Labs</span>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#inicio" class="nav-link hover:text-primary transition-colors" aria-label="Ir a inicio">Inicio</a>
+                    <a href="#nosotros" class="nav-link hover:text-primary transition-colors" aria-label="Conocer sobre nosotros">Nosotros</a>
+                    <a href="#servicios" class="nav-link hover:text-primary transition-colors" aria-label="Ver nuestros servicios">Servicios</a>
+                    <a href="#contacto" class="nav-link hover:text-primary transition-colors" aria-label="Ir a contacto">Contacto</a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <button 
+                    @click="toggleMobileMenu()"
+                    class="md:hidden p-2 rounded-lg hover:bg-white/10 transition-colors"
+                    :aria-expanded="mobileMenuOpen"
+                    aria-label="Abrir menú de navegación"
+                    aria-controls="mobile-menu"
+                >
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
             </div>
-        </nav>
 
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" x-show="mobileMenuOpen" @click.away="mobileMenuOpen = false" x-transition class="md:hidden bg-slate-900/95 backdrop-blur-sm p-6" aria-label="Menú móvil">
-            <a href="#mision" @click="mobileMenuOpen = false" class="block py-2 text-center text-lg hover:text-violet-400">Nosotros</a>
-            <a href="#valores" @click="mobileMenuOpen = false" class="block py-2 text-center text-lg hover:text-violet-400">Valores</a>
-            <a href="#services" @click="mobileMenuOpen = false" class="block py-2 text-center text-lg hover:text-violet-400">Servicios</a>
-            <a href="#contacto" @click="mobileMenuOpen = false" class="block mt-4 w-full bg-violet-600 hover:bg-violet-500 text-white font-bold py-3 px-4 rounded-lg text-center">Contacto</a>
-        </div>
+            <!-- Mobile Navigation -->
+            <div 
+                x-show="mobileMenuOpen" 
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 transform -translate-y-2"
+                x-transition:enter-end="opacity-100 transform translate-y-0"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100 transform translate-y-0"
+                x-transition:leave-end="opacity-0 transform -translate-y-2"
+                class="md:hidden mt-4 py-4 border-t border-white/10"
+                id="mobile-menu"
+                role="menu"
+            >
+                <div class="flex flex-col space-y-4">
+                    <a href="#inicio" @click="handleLinkClick()" class="nav-link hover:text-primary transition-colors" role="menuitem">Inicio</a>
+                    <a href="#nosotros" @click="handleLinkClick()" class="nav-link hover:text-primary transition-colors" role="menuitem">Nosotros</a>
+                    <a href="#servicios" @click="handleLinkClick()" class="nav-link hover:text-primary transition-colors" role="menuitem">Servicios</a>
+                    <a href="#contacto" @click="handleLinkClick()" class="nav-link hover:text-primary transition-colors" role="menuitem">Contacto</a>
+                </div>
+            </div>
+        </nav>
     </header>
 
-    <main>
-        <section class="min-h-screen flex items-center justify-center text-center bg-gradient-to-br from-indigo-900 via-slate-900 to-black">
-            <div class="container mx-auto px-6">
-                <div class="w-32 h-32 mx-auto mb-6">
-                    <svg class="h-full w-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                         <defs>
-                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#4f46e5;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <path d="M73.45,25C86.7,25 95,35.82 95,49.5C95,63.18 86.7,75 73.45,75C60.2,75 50.11,63.18 50.11,49.5C50.11,40.12 55.43,30.2 65,26.5" stroke="url(#logoGradient)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M26.55,75C13.3,75 5,64.18 5,50.5C5,36.82 13.3,25 26.55,25C39.8,25 49.89,36.82 49.89,50.5C49.89,59.88 44.57,69.8 35,73.5" stroke="url(#logoGradient)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <h1 class="text-4xl md:text-6xl font-black tracking-wider uppercase text-white reveal-on-scroll">
-                    SOFTEX LABS
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Hero Section mejorada -->
+        <section id="inicio" class="min-h-screen flex items-center justify-center pt-20 px-6" role="banner">
+            <div class="text-center max-w-4xl mx-auto reveal-on-scroll">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6">
+                    <span class="gradient-text">Softex Labs</span>
                 </h1>
-                <p class="mt-4 text-lg md:text-2xl font-light text-violet-300 max-w-3xl mx-auto reveal-on-scroll">
-                    Transformamos tu PyME en un motor de crecimiento con <span class="font-bold gradient-text">software a medida</span> innovador y confiable.
+                <p class="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed">
+                    Transformamos tu negocio con <strong>soluciones tecnológicas innovadoras</strong> diseñadas específicamente para PYMES
                 </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="#contacto" class="btn-primary inline-flex items-center" aria-label="Contactar con Softex Labs">
+                        Comenzar Proyecto
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                    </a>
+                    <a href="#servicios" class="px-6 py-3 border border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 rounded-lg font-semibold" aria-label="Ver servicios de Softex Labs">
+                        Ver Servicios
+                    </a>
+                </div>
             </div>
         </section>
 
-        <!-- seccion Mision y Vision -->
-        <section id="mision" class="py-20 md:py-32">
-            <div class="container mx-auto px-6">
-                <div class="grid md:grid-cols-2 gap-16 items-center">
-                    <div class="reveal-on-scroll">
-                        <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">Nuestra Misión</h2>
-                        <p class="text-lg leading-relaxed">
-                            En Softex Labs, nuestro propósito es transformar las ideas de nuestros clientes en soluciones de software a medida innovadoras y confiables, impulsando su crecimiento y eficiencia a través de tecnología de vanguardia y un enfoque colaborativo.
+        <!-- Nosotros Section mejorada -->
+        <section id="nosotros" class="py-20 px-6" role="region" aria-labelledby="nosotros-title">
+            <div class="container mx-auto max-w-6xl">
+                <div class="text-center mb-16 reveal-on-scroll">
+                    <h2 id="nosotros-title" class="text-4xl md:text-5xl font-bold mb-6 gradient-text">Sobre Nosotros</h2>
+                    <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                        Somos un equipo apasionado de desarrolladores y consultores tecnológicos comprometidos con el éxito de las pequeñas y medianas empresas.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <!-- Misión -->
+                    <div class="glass-card p-8 reveal-on-scroll">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold">Nuestra Misión</h3>
+                        </div>
+                        <p class="text-gray-300 leading-relaxed">
+                            Democratizar el acceso a la tecnología empresarial, proporcionando soluciones de calidad que impulsen el crecimiento y la competitividad de las PYMES en el mercado digital.
                         </p>
                     </div>
-                    <div class="reveal-on-scroll">
-                         <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">Nuestra Visión</h2>
-                        <p class="text-lg leading-relaxed">
-                           Imaginar un futuro donde Softex Labs es sinónimo de agilidad y visión tecnológica, desarrollando las herramientas que permitan a las empresas adaptarse y prosperar en un mundo digital en constante cambio, siempre con un enfoque humano y de confianza.
+
+                    <!-- Visión -->
+                    <div class="glass-card p-8 reveal-on-scroll">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-r from-secondary to-accent rounded-lg flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold">Nuestra Visión</h3>
+                        </div>
+                        <p class="text-gray-300 leading-relaxed">
+                            Ser el socio tecnológico de referencia para PYMES, reconocidos por nuestra innovación, calidad y compromiso con el éxito de nuestros clientes.
                         </p>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- seccion Valores -->
-        <section id="valores" class="py-20 md:py-32 bg-slate-900/50">
-            <div class="container mx-auto px-6 text-center">
-                <h2 class="text-4xl md:text-5xl font-bold mb-16 gradient-text reveal-on-scroll">Nuestros Valores</h2>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-                    <div class="glass-card p-8 rounded-2xl reveal-on-scroll">
-                        <div class="text-violet-400 mb-4">
-                             <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-2 text-white">Innovación Continua</h3>
-                        <p>Búsqueda constante de nuevas formas de mejorar y explorar tecnologías emergentes para ofrecer soluciones que anticipen el futuro, como nuevas formas de optimizar procesos o interactuar con tus clientes.</p>
-                    </div>
-
-                    <div class="glass-card p-8 rounded-2xl reveal-on-scroll" style="transition-delay: 150ms;">
-                        <div class="text-violet-400 mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-2 text-white">Transparencia y Confianza</h3>
-                        <p>Honestidad y apertura en todas las interacciones, construyendo relaciones basadas en credibilidad y comunicación clara, esenciales para proyectos donde el éxito de tu negocio depende de nuestra solución.</p>
-                    </div>
-
-                    <div class="glass-card p-8 rounded-2xl reveal-on-scroll" style="transition-delay: 300ms;">
-                         <div class="text-violet-400 mb-4">
-                             <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-2 text-white">Excelencia y Calidad</h3>
-                        <p>Compromiso inquebrantable con la entrega de software robusto, eficiente y de alta calidad que garantice la fluidez y el éxito de tus operaciones diarias.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section id="services" class="py-16 lg:py-24 bg-slate-900/50">
-            <div class="container mx-auto px-4">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl lg:text-4xl font-bold gradient-text mb-4 reveal-on-scroll">Nuestros Servicios</h2>
-                    <p class="mt-4 text-lg text-gray-200 reveal-on-scroll">Potenciamos tu negocio con tecnología de vanguardia.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        
-                    <!-- Tarjeta de Servicio 1 -->
-                    <div class="glass-card p-8 rounded-2xl transform hover:-translate-y-2 transition-transform duration-300 reveal-on-scroll flex flex-col h-full">
-                        <div class="flex-grow">
-                            <div class="mb-5 inline-block p-4 rounded-full" aria-hidden="true">
-                                <!-- Icono de POS/Tienda -->
-                                <svg class="w-10 h-10 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h10l-1-1-0.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                <!-- Valores -->
+                <div class="mt-16 reveal-on-scroll">
+                    <h3 class="text-3xl font-bold text-center mb-12 gradient-text">Nuestros Valores</h3>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="glass-card p-6 text-center hover:scale-105 transition-transform duration-300">
+                            <div class="w-16 h-16 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                </svg>
                             </div>
-                            <h3 class="text-xl font-semibold text-white mb-3">🚀 Soluciones de Gestión Empresarial</h3>
-                            <p class="text-gray-300 mb-6 text-left">
-                                Diseñamos sistemas web a medida que centralizan y simplifican la gestión de tu PyME. Desde el control de inventario hasta la administración de clientes y ventas, creamos la plataforma perfecta para tu operación.
-                            </p>
-                            <ul class="space-y-3 text-left text-gray-400">
-                                <li class="flex items-start"><svg class="w-5 h-5 text-violet-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><strong class="text-gray-200">Gestión de Inventario y Stock:</strong> Controla tu stock, recibe alertas y optimiza tus compras.</span></li>
-                                <li class="flex items-start"><svg class="w-5 h-5 text-violet-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><strong class="text-gray-200">Plataformas CRM para Clientes:</strong> Registra interacciones y crea estrategias de fidelización.</span></li>
-                                <li class="flex items-start"><svg class="w-5 h-5 text-violet-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><strong class="text-gray-200">Sistemas de Facturación y Ventas:</strong> Unifica tus procesos de venta con reportes detallados.</span></li>
-                            </ul>
+                            <h4 class="text-xl font-bold mb-3">Innovación</h4>
+                            <p class="text-gray-300">Buscamos constantemente nuevas formas de resolver problemas y mejorar procesos.</p>
                         </div>
-                    </div>
-        
-                    <!-- Tarjeta de Servicio 2 -->
-                    <div class="glass-card p-8 rounded-2xl transform hover:-translate-y-2 transition-transform duration-300 reveal-on-scroll flex flex-col h-full" style="transition-delay: 150ms;">
-                        <div class="flex-grow">
-                            <div class="mb-5 inline-block p-4 rounded-full" aria-hidden="true">
-                                <svg class="w-10 h-10 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-                            </div>
-                            <h3 class="text-xl font-semibold text-white mb-3">⚙️ Automatización de Procesos</h3>
-                            <p class="text-gray-300 mb-6 text-left">
-                                Eliminamos el trabajo repetitivo de tu PyME. Diseñamos herramientas que automatizan desde la generación de reportes hasta la conciliación de pagos, liberando a tu equipo para lo que realmente importa: hacer crecer tu negocio.
-                            </p>
-                            <ul class="space-y-3 text-left text-gray-400">
-                                <li class="flex items-start"><svg class="w-5 h-5 text-violet-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><strong class="text-gray-200">Automatización de Tareas:</strong> Digitaliza la facturación, la gestión de cobros o la entrada de datos.</span></li>
-                                <li class="flex items-start"><svg class="w-5 h-5 text-violet-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><strong class="text-gray-200">Generación de Reportes:</strong> Obtén informes de ventas, rendimiento o KPIs con un solo clic.</span></li>
-                                <li class="flex items-start"><svg class="w-5 h-5 text-violet-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><strong class="text-gray-200">Integración de Sistemas:</strong> Conecta tus diferentes herramientas (ERP, CRM, web) para que la información fluya.</span></li>
-                            </ul>
-                        </div>
-                    </div>
-        
-                    <!-- Tarjeta de Servicio 3 -->
-                    <div class="glass-card p-8 rounded-2xl transform hover:-translate-y-2 transition-transform duration-300 reveal-on-scroll flex flex-col h-full" style="transition-delay: 300ms;">
-                        <div class="flex-grow">
-                            <div class="mb-5 inline-block p-4 rounded-full" aria-hidden="true">
-                                <svg class="w-10 h-10 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h6m-6 4h6m-6 4h6"></path></svg>
-                            </div>
-                            <h3 class="text-xl font-semibold text-white mb-3">🤝 Portales Digitales y Plataformas B2B</h3>
-                            <p class="text-gray-300 mb-6 text-left">
-                                Construimos portales web que fortalecen la relación con tus clientes y agilizan la comunicación con proveedores. Ofrece autoservicio y optimiza tu cadena de valor.
-                            </p>
-                            <ul class="space-y-3 text-left text-gray-400">
-                                <li class="flex items-start"><svg class="w-5 h-5 text-violet-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><strong class="text-gray-200">Portal de Clientes:</strong> Permite a tus clientes ver pedidos, descargar facturas o gestionar su cuenta.</span></li>
-                                <li class="flex items-start"><svg class="w-5 h-5 text-violet-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><strong class="text-gray-200">Plataforma B2B:</strong> Facilita a tus clientes empresariales realizar pedidos y ver catálogos.</span></li>
-                                <li class="flex items-start"><svg class="w-5 h-5 text-violet-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><strong class="text-gray-200">Portal de Proveedores:</strong> Centraliza la gestión de órdenes de compra, envíos y pagos.</span></li>
-                            </ul>
-                        </div>
-                    </div>
 
-                    <!-- Tarjeta de Servicio 4: Desarrollo de Aplicaciones Móviles -->
-                    <div class="glass-card p-8 rounded-2xl transform hover:-translate-y-2 transition-transform duration-300 reveal-on-scroll flex flex-col h-full" style="transition-delay: 450ms;">
-                        <div class="flex-grow">
-                            <div class="mb-5 inline-block p-4 rounded-full" aria-hidden="true">
-                                <svg class="w-10 h-10 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                        <div class="glass-card p-6 text-center hover:scale-105 transition-transform duration-300">
+                            <div class="w-16 h-16 bg-gradient-to-r from-secondary to-accent rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                </svg>
                             </div>
-                            <h3 class="text-xl font-semibold text-white mb-3">📱 Desarrollo de Aplicaciones Móviles</h3>
-                            <p class="text-gray-300 mb-6 text-left">
-                                Llevamos tu negocio al bolsillo de tus clientes y tu equipo con aplicaciones móviles intuitivas. Diseñamos apps que mejoran la experiencia del cliente, optimizan operaciones internas y expanden tu alcance.
-                            </p>
-                            <ul class="space-y-3 text-left text-gray-400">
-                                <li class="flex items-start"><svg class="w-5 h-5 text-violet-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><strong class="text-gray-200">Apps para Clientes:</strong> Ofrece tus servicios, productos o programas de lealtad directamente en su smartphone.</span></li>
-                                <li class="flex items-start"><svg class="w-5 h-5 text-violet-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><strong class="text-gray-200">Herramientas para Equipos:</strong> Apps para que tu personal en campo gestione rutas, tome pedidos o reporte avances.</span></li>
-                                <li class="flex items-start"><svg class="w-5 h-5 text-violet-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><strong class="text-gray-200">Apps de Operaciones Internas:</strong> Facilita la gestión de tareas, inventario o comunicación interna.</span></li>
-                            </ul>
+                            <h4 class="text-xl font-bold mb-3">Transparencia</h4>
+                            <p class="text-gray-300">Mantenemos comunicación clara y honesta en todos nuestros proyectos.</p>
+                        </div>
+
+                        <div class="glass-card p-6 text-center hover:scale-105 transition-transform duration-300">
+                            <div class="w-16 h-16 bg-gradient-to-r from-accent to-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                                </svg>
+                            </div>
+                            <h4 class="text-xl font-bold mb-3">Excelencia</h4>
+                            <p class="text-gray-300">Nos comprometemos a entregar soluciones de la más alta calidad.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-        
-        <!--  seccion Contacto-->
 
-        <section id="contacto" class="py-20 md:py-32">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-16">
-                    <h2 class="text-4xl md:text-5xl font-bold gradient-text reveal-on-scroll">Hablemos de tu Proyecto</h2>
-                    <p class="mt-4 text-lg max-w-2xl mx-auto reveal-on-scroll">¿Listo para empezar? Envíanos un mensaje y nos pondremos en contacto.</p>
+        <!-- Servicios Section mejorada -->
+        <section id="servicios" class="py-20 px-6 bg-slate-800/50" role="region" aria-labelledby="servicios-title">
+            <div class="container mx-auto max-w-6xl">
+                <div class="text-center mb-16 reveal-on-scroll">
+                    <h2 id="servicios-title" class="text-4xl md:text-5xl font-bold mb-6 gradient-text">Nuestros Servicios</h2>
+                    <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                        Ofrecemos soluciones tecnológicas integrales diseñadas para impulsar el crecimiento de tu empresa
+                    </p>
                 </div>
 
-                <div class="max-w-2xl mx-auto" x-data="contactForm">
-                    <!-- Mensajes de éxito y error -->
-                    <div x-show="successMessage" x-transition class="glass-card p-8 rounded-2xl text-center mb-6" aria-live="polite">
-                        <h3 class="text-2xl font-bold text-green-400 mb-2">¡Mensaje Enviado!</h3>
-                        <p x-text="successMessage">Gracias por contactarnos. Nos comunicaremos contigo a la brevedad.</p>
-                    </div>
-                    <div x-show="errorMessage" x-transition class="glass-card p-8 rounded-2xl text-center mb-6 bg-red-500/20 border-red-500/50" aria-live="assertive">
-                        <h3 class="text-2xl font-bold text-red-400 mb-2">Error</h3>
-                        <p x-text="errorMessage"></p>
-                    </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
+                    <!-- Servicio 1 -->
+                    <article class="glass-card p-8 reveal-on-scroll hover:scale-105 transition-all duration-300">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold">Soluciones de Gestión</h3>
+                        </div>
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            Sistemas ERP y CRM personalizados que optimizan tus procesos empresariales, mejoran la productividad y facilitan la toma de decisiones estratégicas.
+                        </p>
+                        <ul class="text-gray-400 space-y-2">
+                            <li class="flex items-center">
+                                <svg class="w-4 h-4 text-primary mr-2" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Gestión de inventarios
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-4 h-4 text-primary mr-2" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Control financiero
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-4 h-4 text-primary mr-2" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Reportes y analytics
+                            </li>
+                        </ul>
+                    </article>
 
-                    <!--formulario -->
-                    <form x-on:submit.prevent="submitData" x-show="!successMessage" class="space-y-6" novalidate>
-                        <div>
-                            <label for="name" class="block text-sm font-medium text-violet-300 mb-2">Nombre Completo <span class="text-red-500">*</span></label>
-                            <input type="text" id="name" x-model="formData.name" x-on:input="validateField('name')" required class="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all" :class="{'border-red-500': errors.name}" :aria-invalid="errors.name ? 'true' : 'false'" aria-describedby="name-error">
-                            <p id="name-error" x-show="errors.name" x-text="errors.name" class="text-red-400 text-sm mt-1"></p>
+                    <!-- Servicio 2 -->
+                    <article class="glass-card p-8 reveal-on-scroll hover:scale-105 transition-all duration-300">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-r from-secondary to-accent rounded-lg flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold">Automatización</h3>
                         </div>
-                        <div>
-                            <label for="email" class="block text-sm font-medium text-violet-300 mb-2">Correo Electrónico <span class="text-red-500">*</span></label>
-                            <input type="email" id="email" x-model="formData.email" x-on:input="validateField('email')" required class="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all" :class="{'border-red-500': errors.email}" :aria-invalid="errors.email ? 'true' : 'false'" aria-describedby="email-error">
-                            <p id="email-error" x-show="errors.email" x-text="errors.email" class="text-red-400 text-sm mt-1"></p>
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            Automatizamos procesos repetitivos y optimizamos flujos de trabajo para aumentar la eficiencia operativa y reducir costos.
+                        </p>
+                        <ul class="text-gray-400 space-y-2">
+                            <li class="flex items-center">
+                                <svg class="w-4 h-4 text-primary mr-2" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Workflows automatizados
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-4 h-4 text-primary mr-2" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Integración de sistemas
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-4 h-4 text-primary mr-2" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Notificaciones inteligentes
+                            </li>
+                        </ul>
+                    </article>
+
+                    <!-- Servicio 3 -->
+                    <article class="glass-card p-8 reveal-on-scroll hover:scale-105 transition-all duration-300">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-r from-accent to-primary rounded-lg flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9m0 9c-5 0-9-4-9-9s4-9 9-9"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold">Portales Digitales</h3>
                         </div>
-                        <div>
-                            <label for="message" class="block text-sm font-medium text-violet-300 mb-2">¿Cómo podemos ayudarte? <span class="text-red-500">*</span></label>
-                            <textarea id="message" rows="5" x-model="formData.message" x-on:input="validateField('message')" required class="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all" :class="{'border-red-500': errors.message}" :aria-invalid="errors.message ? 'true' : 'false'" aria-describedby="message-error"></textarea>
-                            <p id="message-error" x-show="errors.message" x-text="errors.message" class="text-red-400 text-sm mt-1"></p>
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            Desarrollamos portales web modernos y responsivos que fortalecen tu presencia digital y mejoran la experiencia de tus clientes.
+                        </p>
+                        <ul class="text-gray-400 space-y-2">
+                            <li class="flex items-center">
+                                <svg class="w-4 h-4 text-primary mr-2" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Diseño responsive
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-4 h-4 text-primary mr-2" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                SEO optimizado
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-4 h-4 text-primary mr-2" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Panel de administración
+                            </li>
+                        </ul>
+                    </article>
+
+                    <!-- Servicio 4 -->
+                    <article class="glass-card p-8 reveal-on-scroll hover:scale-105 transition-all duration-300">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-r from-primary to-accent rounded-lg flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold">Aplicaciones Móviles</h3>
                         </div>
-                        <div class="text-center">
-                            <button type="submit" :disabled="loading" class="w-full md:w-auto bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold py-3 px-12 rounded-lg transition-transform duration-300 ease-in-out hover:scale-105 shadow-lg shadow-violet-500/20 disabled:opacity-50 disabled:cursor-not-allowed">
-                                <span x-show="!loading">Enviar Mensaje</span>
-                                <span x-show="loading">Enviando...</span>
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            Creamos aplicaciones móviles nativas e híbridas que conectan tu negocio con tus clientes en cualquier momento y lugar.
+                        </p>
+                        <ul class="text-gray-400 space-y-2">
+                            <li class="flex items-center">
+                                <svg class="w-4 h-4 text-primary mr-2" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                iOS y Android
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-4 h-4 text-primary mr-2" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Interfaz intuitiva
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-4 h-4 text-primary mr-2" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Sincronización en tiempo real
+                            </li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section mejorada -->
+        <section id="contacto" class="py-20 px-6" role="region" aria-labelledby="contacto-title">
+            <div class="container mx-auto max-w-4xl">
+                <div class="text-center mb-16 reveal-on-scroll">
+                    <h2 id="contacto-title" class="text-4xl md:text-5xl font-bold mb-6 gradient-text">Contactanos</h2>
+                    <p class="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
+                        ¿Listo para transformar tu negocio? Cuéntanos sobre tu proyecto y te ayudaremos a hacerlo realidad.
+                    </p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <!-- Formulario mejorado -->
+                    <div class="glass-card p-8 reveal-on-scroll" x-data="contactForm()">
+                        <h3 class="text-2xl font-bold mb-6">Envíanos un mensaje</h3>
+                        
+                        <!-- Alertas mejoradas -->
+                        <div x-show="showSuccess" x-transition class="alert alert-success" role="alert" aria-live="polite">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span x-text="successMessage"></span>
+                            <button @click="closeSuccess()" class="alert-close" aria-label="Cerrar mensaje de éxito">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                </svg>
                             </button>
                         </div>
-                    </form>
-                </div>
-            </div>
-        </section>
 
-        <!-- seccion Datos de Contacto Directo -->
-        <section class="pb-20 md:pb-32">
-            <div class="container mx-auto px-6 text-center">
-                <h3 class="text-2xl md:text-3xl font-bold mb-12 text-white reveal-on-scroll">O contáctanos directamente</h3>
-                <div class="grid md:grid-cols-1 lg:grid-cols-3 gap-8 text-left">
-
-                    <!-- Email -->
-                    <div class="glass-card p-8 rounded-2xl reveal-on-scroll flex items-start space-x-4">
-                        <div class="text-violet-400 flex-shrink-0 mt-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        <div x-show="showError" x-transition class="alert alert-error" role="alert" aria-live="polite">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                             </svg>
+                            <span x-text="errorMessage"></span>
+                            <button @click="closeError()" class="alert-close" aria-label="Cerrar mensaje de error">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
                         </div>
-                        <div>
-                            <h4 class="text-xl font-bold text-white mb-1">Correo Electrónico</h4>
-                            <a href="mailto:contacto@softex-labs.xyz" class="text-violet-300 hover:text-violet-200 transition-colors break-all">contacto@softex-labs.xyz</a>
-                        </div>
+
+                        <form @submit.prevent="submitData()" novalidate>
+                            <!-- Campo Nombre -->
+                            <div class="form-group">
+                                <label for="name" class="block text-sm font-medium mb-2">Nombre completo *</label>
+                                <input 
+                                    type="text" 
+                                    id="name"
+                                    x-model="formData.name"
+                                    @input="onInput('name')"
+                                    :class="getFieldClass('name')"
+                                    placeholder="Tu nombre completo"
+                                    required
+                                    aria-describedby="name-error name-counter"
+                                    autocomplete="name"
+                                >
+                                <div class="flex justify-between items-start">
+                                    <div x-show="errors.name" class="error-message" id="name-error" role="alert">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span x-text="errors.name"></span>
+                                    </div>
+                                    <div :class="getCharCounterClass('name')" id="name-counter">
+                                        <span x-text="charCounts.name"></span>/<span x-text="maxLengths.name"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Campo Email -->
+                            <div class="form-group">
+                                <label for="email" class="block text-sm font-medium mb-2">Correo electrónico *</label>
+                                <input 
+                                    type="email" 
+                                    id="email"
+                                    x-model="formData.email"
+                                    @input="onInput('email')"
+                                    :class="getFieldClass('email')"
+                                    placeholder="tu@email.com"
+                                    required
+                                    aria-describedby="email-error"
+                                    autocomplete="email"
+                                >
+                                <div x-show="errors.email" class="error-message" id="email-error" role="alert">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span x-text="errors.email"></span>
+                                </div>
+                            </div>
+
+                            <!-- Campo Mensaje -->
+                            <div class="form-group">
+                                <label for="message" class="block text-sm font-medium mb-2">Mensaje *</label>
+                                <textarea 
+                                    id="message"
+                                    x-model="formData.message"
+                                    @input="onInput('message')"
+                                    :class="getFieldClass('message') + ' form-textarea'"
+                                    placeholder="Cuéntanos sobre tu proyecto..."
+                                    required
+                                    aria-describedby="message-error message-counter"
+                                    rows="5"
+                                ></textarea>
+                                <div class="flex justify-between items-start">
+                                    <div x-show="errors.message" class="error-message" id="message-error" role="alert">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span x-text="errors.message"></span>
+                                    </div>
+                                    <div :class="getCharCounterClass('message')" id="message-counter">
+                                        <span x-text="charCounts.message"></span>/<span x-text="maxLengths.message"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Botón de envío -->
+                            <button 
+                                type="submit" 
+                                :disabled="loading"
+                                class="btn-primary w-full flex items-center justify-center"
+                                :aria-label="loading ? 'Enviando mensaje...' : 'Enviar mensaje'"
+                            >
+                                <span x-show="loading" class="spinner" aria-hidden="true"></span>
+                                <span x-text="loading ? 'Enviando...' : 'Enviar Mensaje'"></span>
+                            </button>
+                        </form>
                     </div>
 
-                    <!-- WhatsApp -->
-                    <div class="glass-card p-8 rounded-2xl reveal-on-scroll flex items-start space-x-4" style="transition-delay: 150ms;">
-                        <div class="text-violet-400 flex-shrink-0 mt-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                            </svg>
+                    <!-- Información de contacto -->
+                    <div class="space-y-8 reveal-on-scroll">
+                        <div class="glass-card p-6">
+                            <h3 class="text-xl font-bold mb-4">Información de Contacto</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <a href="mailto:contacto@softex-labs.xyz" class="hover:text-primary transition-colors">
+                                        contacto@softex-labs.xyz
+                                    </a>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    <span>España</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 text-primary mr-3" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.109"/>
+                                    </svg>
+                                    <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors">
+                                        WhatsApp
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <h4 class="text-xl font-bold text-white mb-1">WhatsApp</h4>
-                            <a href="https://wa.me/573178334370" target="_blank" rel="noopener noreferrer" class="text-violet-300 hover:text-violet-200 transition-colors" aria-label="Enviar mensaje por WhatsApp (se abre en una nueva pestaña)">+57 317 8334370</a>
+
+                        <div class="glass-card p-6">
+                            <h3 class="text-xl font-bold mb-4">Horario de Atención</h3>
+                            <div class="space-y-2 text-gray-300">
+                                <p><strong>Lunes - Viernes:</strong> 9:00 - 18:00</p>
+                                <p><strong>Sábados:</strong> 10:00 - 14:00</p>
+                                <p><strong>Domingos:</strong> Cerrado</p>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-6">
+                            <h3 class="text-xl font-bold mb-4">Tiempo de Respuesta</h3>
+                            <p class="text-gray-300">
+                                Nos comprometemos a responder tu consulta en un máximo de <strong>24 horas</strong> durante días laborables.
+                            </p>
                         </div>
                     </div>
-
-                    <!-- Ubicación -->
-                    <div class="glass-card p-8 rounded-2xl reveal-on-scroll flex items-start space-x-4" style="transition-delay: 300ms;">
-                        <div class="text-violet-400 flex-shrink-0 mt-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-bold text-white mb-1">Ubicación</h4>
-                            <p class="text-violet-300">Valle del Cauca, Colombia</p>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="bg-slate-900/50 border-t border-slate-800 py-12 text-gray-400">
-        <div class="container mx-auto px-6">
-            <div class="grid md:grid-cols-3 gap-8 text-center md:text-left">
-                <!-- Logo y Copyright -->
-                <div>
-                    <div class="flex items-center justify-center md:justify-start space-x-2 mb-4">
-                        <svg class="h-8 w-8 text-violet-400" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="footerLogoTitle">
-                            <title id="footerLogoTitle">Logo de Softex Labs</title>
-                            <path d="M73.45,25C86.7,25 95,35.82 95,49.5C95,63.18 86.7,75 73.45,75C60.2,75 50.11,63.18 50.11,49.5C50.11,40.12 55.43,30.2 65,26.5" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M26.55,75C13.3,75 5,64.18 5,50.5C5,36.82 13.3,25 26.55,25C39.8,25 49.89,36.82 49.89,50.5C49.89,59.88 44.57,69.8 35,73.5" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        <span class="text-xl font-bold text-white">SOFTEX LABS</span>
+    <!-- Footer mejorado -->
+    <footer class="bg-slate-900 border-t border-white/10 py-12 px-6" role="contentinfo">
+        <div class="container mx-auto max-w-6xl">
+            <div class="grid md:grid-cols-4 gap-8">
+                <!-- Logo y descripción -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-sm" aria-hidden="true">SL</span>
+                        </div>
+                        <span class="text-xl font-bold gradient-text">Softex Labs</span>
                     </div>
-                    <p class="text-sm">Diseñando el futuro del software, una línea de código a la vez.</p>
-                </div>
-    
-                <!-- Navegación -->
-                <div>
-                    <h4 class="font-bold text-white mb-4 uppercase tracking-wider">Navegación</h4>
-                    <nav class="flex flex-col space-y-2">
-                        <a href="#mision" class="hover:text-violet-400 transition-colors">Nosotros</a>
-                        <a href="#valores" class="hover:text-violet-400 transition-colors">Valores</a>
-                        <a href="#services" class="hover:text-violet-400 transition-colors">Servicios</a>
-                        <a href="#contacto" class="hover:text-violet-400 transition-colors">Contacto</a>
-                    </nav>
-                </div>
-    
-                <!-- Redes Sociales -->
-                <div>
-                    <h4 class="font-bold text-white mb-4 uppercase tracking-wider">Conecta</h4>
-                    <div class="flex justify-center md:justify-start space-x-4">
-                        <!-- Reemplaza '#' con tus URLs reales -->
-                        <a href="#" aria-label="Visita nuestro perfil de LinkedIn" class="hover:text-violet-400 transition-colors">
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"></path></svg>
+                    <p class="text-gray-400 mb-4 leading-relaxed">
+                        Transformamos negocios con soluciones tecnológicas innovadoras. Tu socio estratégico en la era digital.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors" aria-label="LinkedIn de Softex Labs">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
                         </a>
-                        <a href="https://github.com/softexlabstart" target="_blank" rel="noopener noreferrer" aria-label="Visita nuestro perfil de GitHub" class="hover:text-violet-400 transition-colors">
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.82c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.378.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.942.359.308.678.92.678 1.852 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0 0 22 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd"></path></svg>
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors" aria-label="Twitter de Softex Labs">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                            </svg>
                         </a>
                     </div>
+                </div>
+
+                <!-- Enlaces rápidos -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Enlaces Rápidos</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#inicio" class="text-gray-400 hover:text-primary transition-colors">Inicio</a></li>
+                        <li><a href="#nosotros" class="text-gray-400 hover:text-primary transition-colors">Nosotros</a></li>
+                        <li><a href="#servicios" class="text-gray-400 hover:text-primary transition-colors">Servicios</a></li>
+                        <li><a href="#contacto" class="text-gray-400 hover:text-primary transition-colors">Contacto</a></li>
+                    </ul>
+                </div>
+
+                <!-- Servicios -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Servicios</h3>
+                    <ul class="space-y-2">
+                        <li><span class="text-gray-400">Gestión Empresarial</span></li>
+                        <li><span class="text-gray-400">Automatización</span></li>
+                        <li><span class="text-gray-400">Portales Digitales</span></li>
+                        <li><span class="text-gray-400">Apps Móviles</span></li>
+                    </ul>
                 </div>
             </div>
-            <div class="mt-8 pt-8 border-t border-slate-800 text-center text-sm">
-                 <p>&copy; <span id="year"></span> Softex Labs. Todos los derechos reservados.</p>
+
+            <div class="border-t border-white/10 mt-8 pt-8 text-center">
+                <p class="text-gray-400">
+                    © <span id="year">2024</span> Softex Labs. Todos los derechos reservados.
+                </p>
             </div>
         </div>
     </footer>
 
-    <!-- Vercel Speed Insights -->
-    <script src="/_vercel/speed-insights/script.js" defer></script>
-    <!-- Vercel Analytics -->
-    <script>window.va = window.va || function () { (window.va.q = window.va.q || []).push(arguments); };</script>
-    <script src="/_vercel/insights/script.js" defer></script>
+    <!-- Scripts -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="/app.js"></script>
+    
+    <!-- Analytics mejorado -->
+    <script>
+        // Vercel Analytics
+        if (typeof window !== 'undefined') {
+            import('https://unpkg.com/@vercel/analytics@1.0.0/dist/index.js').then(({ inject }) => {
+                inject();
+            });
+        }
+    </script>
 </body>
 </html>

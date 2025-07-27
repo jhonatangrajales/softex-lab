@@ -1,5 +1,39 @@
 {
+  "name": "softex-labs-landing",
+  "version": "2.0.0",
+  "description": "Landing page mejorada para Softex Labs con funcionalidades avanzadas",
+  "main": "app.js",
+  "scripts": {
+    "dev": "npx http-server . -p 3000",
+    "build": "echo 'Build completed'",
+    "test": "echo 'Frontend tests would go here'",
+    "lint": "echo 'Linting would go here'",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "landing-page",
+    "softex-labs",
+    "pymes",
+    "tecnologia",
+    "desarrollo-software"
+  ],
+  "author": "Softex Labs",
+  "license": "MIT",
   "dependencies": {
-    "@vercel/analytics": "^1.5.0"
-  }
+    "@vercel/analytics": "^1.0.0"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/softex-labs/landing.git"
+  },
+  "bugs": {
+    "url": "https://github.com/softex-labs/landing/issues"
+  },
+  "homepage": "https://softex-labs.xyz"
 }

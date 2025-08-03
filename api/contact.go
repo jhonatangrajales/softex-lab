@@ -277,7 +277,11 @@ func sendEmail(config SmtpConfig, data ContactData, clientIP string) error {
 	if err != nil {
 		return fmt.Errorf("error al crear cliente SMTP: %v", err)
 	}
-	defer client.Quit()
+	defer func() {
+		if err := client.Quit(); err != nil {
+			log.Printf("Error al cerrar cliente SMTP: %v", err)
+		}
+	}()
 
 	if err = client.Auth(auth); err != nil {
 		return fmt.Errorf("error de autenticación SMTP: %v", err)
@@ -400,7 +404,7 @@ func Contact(w http.ResponseWriter, r *http.Request) {
 		} else if strings.Contains(err.Error(), "authentication") {
 			sendJSONError(w, "Error de configuración del servidor. Por favor, contacta al administrador.", http.StatusInternalServerError)
 		} else {
-			sendJSONError(w, "Error al enviar el mensaje. Por favor, intenta de nuevo o contacta directamente a contacto@softex-labs.xyz", http.StatusInternalServerError)
+			sendJSONError(w, "Error al enviar el mensaje. Por favor, intenta de nuevo o contacta directamente a contacto@softex-labs.xyz\nDetalle del error: "+err.Error(), http.StatusInternalServerError)
 		}
 		return
 	}

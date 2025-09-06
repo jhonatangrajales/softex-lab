@@ -1,3 +1,3 @@
-module github.com/softex-labs/landing
+module github.com/jhonatangrajales/softexlabs
 
-go 1.19
+go 1.21

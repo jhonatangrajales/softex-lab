@@ -69,7 +69,7 @@ func newSmtpConfig() (SmtpConfig, error) {
 	}
 
 	if config.ToEmail == "" {
-		config.ToEmail = "contacto@softex-labs.xyz"
+		config.ToEmail = "info@softexlab.com"
 	}
 
 	return config, nil
@@ -400,11 +400,11 @@ func Contact(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Error al enviar correo para IP %s: %v", clientIP, err)
 		// Mensaje más amigable para el usuario
 		if strings.Contains(err.Error(), "TLS handshake") || strings.Contains(err.Error(), "connection") {
-			sendJSONError(w, "Error de conexión con el servidor de correo. Por favor, intenta de nuevo en unos minutos o contacta directamente a contacto@softex-labs.xyz", http.StatusServiceUnavailable)
+			   sendJSONError(w, "Error de conexión con el servidor de correo. Por favor, intenta de nuevo en unos minutos o contacta directamente a info@softexlab.com", http.StatusServiceUnavailable)
 		} else if strings.Contains(err.Error(), "authentication") {
 			sendJSONError(w, "Error de configuración del servidor. Por favor, contacta al administrador.", http.StatusInternalServerError)
 		} else {
-			sendJSONError(w, "Error al enviar el mensaje. Por favor, intenta de nuevo o contacta directamente a contacto@softex-labs.xyz\nDetalle del error: "+err.Error(), http.StatusInternalServerError)
+			   sendJSONError(w, "Error al enviar el mensaje. Por favor, intenta de nuevo o contacta directamente a info@softexlab.com\nDetalle del error: "+err.Error(), http.StatusInternalServerError)
 		}
 		return
 	}

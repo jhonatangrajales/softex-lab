@@ -258,59 +258,56 @@ func sendEmail(config SmtpConfig, data ContactData, clientIP string) error {
 	msg := fmt.Sprintf("From: %s\r\nTo: %s\r\nSubject: %s\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n%s",
 		config.User, config.ToEmail, subject, body)
 
-	auth := smtp.PlainAuth("", config.User, config.Pass, config.Host)
-	addr := fmt.Sprintf("%s:%s", config.Host, config.Port)
+       auth := smtp.PlainAuth("", config.User, config.Pass, config.Host)
+       addr := fmt.Sprintf("%s:%s", config.Host, config.Port)
 
-	// Configurar TLS
-	tlsConfig := &tls.Config{
-		InsecureSkipVerify: false,
-		ServerName:         config.Host,
-	}
+       // Conexión normal (sin TLS directo)
+       client, err := smtp.Dial(addr)
+       if err != nil {
+	       return fmt.Errorf("error al conectar con SMTP: %v", err)
+       }
+       defer func() {
+	       if err := client.Quit(); err != nil {
+		       log.Printf("Error al cerrar cliente SMTP: %v", err)
+	       }
+       }()
 
-	conn, err := tls.Dial("tcp", addr, tlsConfig)
-	if err != nil {
-		return fmt.Errorf("error al conectar con TLS: %v", err)
-	}
-	defer conn.Close()
+       // STARTTLS
+       tlsConfig := &tls.Config{
+	       ServerName: config.Host,
+       }
+       if err = client.StartTLS(tlsConfig); err != nil {
+	       return fmt.Errorf("error al iniciar STARTTLS: %v", err)
+       }
 
-	client, err := smtp.NewClient(conn, config.Host)
-	if err != nil {
-		return fmt.Errorf("error al crear cliente SMTP: %v", err)
-	}
-	defer func() {
-		if err := client.Quit(); err != nil {
-			log.Printf("Error al cerrar cliente SMTP: %v", err)
-		}
-	}()
+       if err = client.Auth(auth); err != nil {
+	       return fmt.Errorf("error de autenticación SMTP: %v", err)
+       }
 
-	if err = client.Auth(auth); err != nil {
-		return fmt.Errorf("error de autenticación SMTP: %v", err)
-	}
+       if err = client.Mail(config.User); err != nil {
+	       return fmt.Errorf("error al establecer remitente: %v", err)
+       }
 
-	if err = client.Mail(config.User); err != nil {
-		return fmt.Errorf("error al establecer remitente: %v", err)
-	}
+       if err = client.Rcpt(config.ToEmail); err != nil {
+	       return fmt.Errorf("error al establecer destinatario: %v", err)
+       }
 
-	if err = client.Rcpt(config.ToEmail); err != nil {
-		return fmt.Errorf("error al establecer destinatario: %v", err)
-	}
+       writer, err := client.Data()
+       if err != nil {
+	       return fmt.Errorf("error al iniciar datos: %v", err)
+       }
 
-	writer, err := client.Data()
-	if err != nil {
-		return fmt.Errorf("error al iniciar datos: %v", err)
-	}
+       _, err = writer.Write([]byte(msg))
+       if err != nil {
+	       return fmt.Errorf("error al escribir mensaje: %v", err)
+       }
 
-	_, err = writer.Write([]byte(msg))
-	if err != nil {
-		return fmt.Errorf("error al escribir mensaje: %v", err)
-	}
+       err = writer.Close()
+       if err != nil {
+	       return fmt.Errorf("error al cerrar escritor: %v", err)
+       }
 
-	err = writer.Close()
-	if err != nil {
-		return fmt.Errorf("error al cerrar escritor: %v", err)
-	}
-
-	return nil
+       return nil
 }
 
 // Función para parsear y validar la request

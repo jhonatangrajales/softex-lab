@@ -18,9 +18,10 @@ import (
 
 // ContactData representa los datos del formulario de contacto
 type ContactData struct {
-	Name    string `json:"name"`
-	Email   string `json:"email"`
-	Message string `json:"message"`
+	Name     string   `json:"name"`
+	Email    string   `json:"email"`
+	Message  string   `json:"message"`
+	Services []string `json:"services"`
 }
 
 // SmtpConfig contiene la configuración SMTP
@@ -258,56 +259,56 @@ func sendEmail(config SmtpConfig, data ContactData, clientIP string) error {
 	msg := fmt.Sprintf("From: %s\r\nTo: %s\r\nSubject: %s\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n%s",
 		config.User, config.ToEmail, subject, body)
 
-       auth := smtp.PlainAuth("", config.User, config.Pass, config.Host)
-       addr := fmt.Sprintf("%s:%s", config.Host, config.Port)
+	auth := smtp.PlainAuth("", config.User, config.Pass, config.Host)
+	addr := fmt.Sprintf("%s:%s", config.Host, config.Port)
 
-       // Conexión normal (sin TLS directo)
-       client, err := smtp.Dial(addr)
-       if err != nil {
-	       return fmt.Errorf("error al conectar con SMTP: %v", err)
-       }
-       defer func() {
-	       if err := client.Quit(); err != nil {
-		       log.Printf("Error al cerrar cliente SMTP: %v", err)
-	       }
-       }()
+	// Conexión normal (sin TLS directo)
+	client, err := smtp.Dial(addr)
+	if err != nil {
+		return fmt.Errorf("error al conectar con SMTP: %v", err)
+	}
+	defer func() {
+		if err := client.Quit(); err != nil {
+			log.Printf("Error al cerrar cliente SMTP: %v", err)
+		}
+	}()
 
-       // STARTTLS
-       tlsConfig := &tls.Config{
-	       ServerName: config.Host,
-       }
-       if err = client.StartTLS(tlsConfig); err != nil {
-	       return fmt.Errorf("error al iniciar STARTTLS: %v", err)
-       }
+	// STARTTLS
+	tlsConfig := &tls.Config{
+		ServerName: config.Host,
+	}
+	if err = client.StartTLS(tlsConfig); err != nil {
+		return fmt.Errorf("error al iniciar STARTTLS: %v", err)
+	}
 
-       if err = client.Auth(auth); err != nil {
-	       return fmt.Errorf("error de autenticación SMTP: %v", err)
-       }
+	if err = client.Auth(auth); err != nil {
+		return fmt.Errorf("error de autenticación SMTP: %v", err)
+	}
 
-       if err = client.Mail(config.User); err != nil {
-	       return fmt.Errorf("error al establecer remitente: %v", err)
-       }
+	if err = client.Mail(config.User); err != nil {
+		return fmt.Errorf("error al establecer remitente: %v", err)
+	}
 
-       if err = client.Rcpt(config.ToEmail); err != nil {
-	       return fmt.Errorf("error al establecer destinatario: %v", err)
-       }
+	if err = client.Rcpt(config.ToEmail); err != nil {
+		return fmt.Errorf("error al establecer destinatario: %v", err)
+	}
 
-       writer, err := client.Data()
-       if err != nil {
-	       return fmt.Errorf("error al iniciar datos: %v", err)
-       }
+	writer, err := client.Data()
+	if err != nil {
+		return fmt.Errorf("error al iniciar datos: %v", err)
+	}
 
-       _, err = writer.Write([]byte(msg))
-       if err != nil {
-	       return fmt.Errorf("error al escribir mensaje: %v", err)
-       }
+	_, err = writer.Write([]byte(msg))
+	if err != nil {
+		return fmt.Errorf("error al escribir mensaje: %v", err)
+	}
 
-       err = writer.Close()
-       if err != nil {
-	       return fmt.Errorf("error al cerrar escritor: %v", err)
-       }
+	err = writer.Close()
+	if err != nil {
+		return fmt.Errorf("error al cerrar escritor: %v", err)
+	}
 
-       return nil
+	return nil
 }
 
 // Función para parsear y validar la request
@@ -397,11 +398,11 @@ func Contact(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Error al enviar correo para IP %s: %v", clientIP, err)
 		// Mensaje más amigable para el usuario
 		if strings.Contains(err.Error(), "TLS handshake") || strings.Contains(err.Error(), "connection") {
-			   sendJSONError(w, "Error de conexión con el servidor de correo. Por favor, intenta de nuevo en unos minutos o contacta directamente a info@softexlab.com", http.StatusServiceUnavailable)
+			sendJSONError(w, "Error de conexión con el servidor de correo. Por favor, intenta de nuevo en unos minutos o contacta directamente a info@softexlab.com", http.StatusServiceUnavailable)
 		} else if strings.Contains(err.Error(), "authentication") {
 			sendJSONError(w, "Error de configuración del servidor. Por favor, contacta al administrador.", http.StatusInternalServerError)
 		} else {
-			   sendJSONError(w, "Error al enviar el mensaje. Por favor, intenta de nuevo o contacta directamente a info@softexlab.com\nDetalle del error: "+err.Error(), http.StatusInternalServerError)
+			sendJSONError(w, "Error al enviar el mensaje. Por favor, intenta de nuevo o contacta directamente a info@softexlab.com\nDetalle del error: "+err.Error(), http.StatusInternalServerError)
 		}
 		return
 	}
